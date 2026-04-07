@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Next.js
+.next/
+/out/
+
+# Build
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment
+.env*
+.config
+.accesslog
+.stats
+
+# Debug logs
+*.log
+
+# Misc
+.DS_Store
+*.pem
+.vercel
+
+# Claude / AI tools
+.claude
+.z-ai-config
+.zscripts/
+
+# Skills (internal)
+/skills/
+
+# Download cache (pesquisas, jsons temporários)
+/download/search*.json
+/download/puter_*.json
+/download/part*.txt
+/download/*.md
+
+# Caddy (local dev)
+Caddyfile
+
+# Mini services
+/mini-services/
+/examples/
+
+# Prisma (não usado no static)
+/prisma/
+
+# Agent context
+/agent-ctx/
