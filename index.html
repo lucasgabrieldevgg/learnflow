@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnFlow — Aprenda Qualquer Coisa com IA</title>
+<meta name="description" content="Plataforma de aprendizado com IA tutora pessoal. Aprenda qualquer coisa: programação, matemática, idiomas, ciências, música e muito mais.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg-0: #0a0a0f;
+    --bg-1: #13131a;
+    --bg-2: #1a1a24;
+    --bg-3: #232333;
+    --border: #2a2a3a;
+    --text: #e4e4ef;
+    --text-dim: #8888a0;
+    --accent: #a855f7;
+    --accent-2: #ec4899;
+    --accent-3: #06b6d4;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+  }
+  html { color-scheme: dark; }
+  body {
+    margin: 0;
+    background: var(--bg-0);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 0%, rgba(168, 85, 247, 0.15), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 0% 100%, rgba(6, 182, 212, 0.1), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 64px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 10px 30px -8px var(--accent);
+  }
+  .logo h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .logo p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  select.lang-select {
+    padding: 8px 30px 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-2) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238888a0'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 8px center / 16px;
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    appearance: none;
+  }
+  .btn {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+    color: var(--text);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--bg-3); border-color: var(--accent); color: var(--accent); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border: none;
+    color: white;
+  }
+  .btn-primary:hover { color: white; box-shadow: 0 8px 24px -8px var(--accent); }
+  .btn-icon { padding: 8px; width: 36px; height: 36px; justify-content: center; }
+
+  /* Welcome screen */
+  .welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .welcome-icon {
+    font-size: 72px;
+    margin-bottom: 16px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .welcome h2 {
+    font-size: 36px;
+    margin: 0 0 12px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .welcome p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 580px;
+    margin: 0 0 32px;
+    line-height: 1.6;
+  }
+  .btn-cta {
+    padding: 16px 36px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 30px -8px var(--accent);
+    transition: all 0.2s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px -8px var(--accent);
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+    max-width: 900px;
+    width: 100%;
+  }
+  .feature {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+  }
+  .feature-icon { font-size: 24px; margin-bottom: 8px; }
+  .feature h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .feature p { margin: 0; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+  /* Onboarding */
+  .onboarding {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .onb-card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 0 20px 60px -20px rgba(168, 85, 247, 0.4);
+  }
+  .onb-step {
+    font-size: 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .onb-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .onb-subtitle {
+    color: var(--text-dim);
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .input-group {
+    margin-bottom: 20px;
+  }
+  .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  input[type="text"], input[type="email"], select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+    color: var(--text);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .topic-card {
+    padding: 16px 12px;
+    border: 2px solid var(--border);
+    background: var(--bg-2);
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .topic-card:hover {
+    border-color: var(--accent);
+    background: rgba(168, 85, 247, 0.05);
+    transform: translateY(-2px);
+  }
+  .topic-card.selected {
+    border-color: var(--accent);
+    background: rgba(168, 85, 247, 0.1);
+    color: var(--accent);
+  }
+  .topic-card-icon { font-size: 24px; display: block; margin-bottom: 4px; }
+  .onb-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  /* Chat */
+  .chat-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .chat-header {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .chat-info { display: flex; align-items: center; gap: 12px; }
+  .chat-info-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .chat-info h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  .chat-info p { margin: 0; font-size: 12px; color: var(--text-dim); }
+  .chat-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .chat-stats strong {
+    color: var(--accent);
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .chat-messages {
+    flex: 1;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    overflow-y: auto;
+    min-height: 360px;
+    max-height: 60vh;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .message {
+    display: flex;
+    gap: 10px;
+    max-width: 85%;
+  }
+  .message.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    background: var(--bg-3);
+  }
+  .message.user .msg-avatar {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .message.ai .msg-avatar {
+    background: linear-gradient(135deg, var(--accent-3), var(--accent));
+  }
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+  }
+  .message.user .msg-bubble {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    border: none;
+    border-bottom-right-radius: 4px;
+  }
+  .message.ai .msg-bubble {
+    border-bottom-left-radius: 4px;
+  }
+  .msg-bubble pre {
+    background: var(--bg-0);
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 8px 0;
+    font-size: 12px;
+    border: 1px solid var(--border);
+  }
+  .msg-bubble code {
+    background: var(--bg-0);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent-3);
+  }
+  .msg-bubble pre code { background: transparent; padding: 0; color: var(--text); }
+
+  .typing {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0;
+  }
+  .typing span {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: typing 1.4s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .chat-input-area {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .chat-input-area textarea {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    padding: 8px;
+    min-height: 24px;
+    max-height: 120px;
+    line-height: 1.5;
+  }
+  .send-btn {
+    width: 40px; height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .send-btn:hover { transform: scale(1.05); }
+  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .suggestions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .suggestion-chip {
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-1);
+    color: var(--text);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .suggestion-chip:hover {
+    border-color: var(--accent);
+    background: rgba(168, 85, 247, 0.05);
+    color: var(--accent);
+  }
+
+  /* Tools drawer */
+  .tools-drawer {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .tools-drawer.show { display: block; }
+  .tools-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .tool-btn {
+    padding: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 12px;
+    text-align: left;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .tool-btn:hover { border-color: var(--accent); background: rgba(168, 85, 247, 0.05); }
+  .tool-btn-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: 12px 20px;
+    background: var(--bg-3);
+    color: var(--text);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 100;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    padding: 20px;
+    color: var(--text-dim);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .container { padding: 16px 12px 48px; }
+    .welcome h2 { font-size: 28px; }
+    .welcome p { font-size: 15px; }
+    .onb-card { padding: 24px; }
+    .onb-title { font-size: 22px; }
+    .chat-messages { padding: 14px; min-height: 280px; }
+    .msg-bubble { font-size: 13px; }
+    .chat-stats { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo" onclick="goHome()">
+      <div class="logo-icon">🎓</div>
+      <div>
+        <h1>LearnFlow</h1>
+        <p data-i18n="tagline">Aprenda qualquer coisa com IA</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <select class="lang-select" id="langSelect">
+        <option value="pt-BR">🇧🇷 PT-BR</option>
+        <option value="en">🇺🇸 EN</option>
+        <option value="es">🇪🇸 ES</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="it">🇮🇹 IT</option>
+        <option value="ja">🇯🇵 JP</option>
+        <option value="zh-CN">🇨🇳 ZH</option>
+      </select>
+      <button class="btn btn-icon" id="toolsBtn" title="Tools" onclick="toggleTools()">🧰</button>
+      <button class="btn btn-icon" id="resetBtn" title="Reset" onclick="resetSession()">🔄</button>
+    </div>
+  </header>
+
+  <!-- Welcome screen -->
+  <div class="welcome" id="welcomeScreen">
+    <div class="welcome-icon">🎓</div>
+    <h2 data-i18n="welcome-title">Aprenda qualquer coisa com IA</h2>
+    <p data-i18n="welcome-desc">
+      Sua tutora pessoal de IA. Defina o que quer aprender, escolha o nível e
+      comece a conversar. A IA vai te guiar, explicar, criar exercícios e te
+      ajudar a dominar qualquer assunto no seu ritmo.
+    </p>
+    <button class="btn-cta" onclick="startOnboarding()">
+      <span data-i18n="start">Começar agora</span>
+      <span>→</span>
+    </button>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🧠</div>
+        <h3 data-i18n="feat-1-title">IA tutora personalizada</h3>
+        <p data-i18n="feat-1-desc">Adapta o ensino ao seu nível e ritmo de aprendizado.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📚</div>
+        <h3 data-i18n="feat-2-title">Qualquer assunto</h3>
+        <p data-i18n="feat-2-desc">Programação, matemática, idiomas, ciências, música e muito mais.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3 data-i18n="feat-3-title">Ferramentas de estudo</h3>
+        <p data-i18n="feat-3-desc">Resumos, quizzes, flashcards, analogias e explicações Feynman.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <h3 data-i18n="feat-4-title">100% no navegador</h3>
+        <p data-i18n="feat-4-desc">Sem login, sem servidor. Suas conversas ficam no seu dispositivo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div class="onboarding" id="onboardingScreen" style="display:none;">
+    <div class="onb-card">
+      <!-- Step 1: Name -->
+      <div id="step1">
+        <div class="onb-step" data-i18n="step-1-of-3">Passo 1 de 3</div>
+        <h2 class="onb-title" data-i18n="step1-title">Como podemos te chamar?</h2>
+        <p class="onb-subtitle" data-i18n="step1-sub">Pode ser seu nome, apelido ou qualquer coisa que você goste.</p>
+        <div class="input-group">
+          <input type="text" id="nameInput" data-i18n-ph="step1-ph" placeholder="Seu nome (ou apelido)">
+        </div>
+        <div class="onb-actions">
+          <button class="btn" onclick="goHome()" data-i18n="back">← Voltar</button>
+          <button class="btn btn-primary" onclick="goToStep2()" data-i18n="next">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Topic -->
+      <div id="step2" style="display:none;">
+        <div class="onb-step" data-i18n="step-2-of-3">Passo 2 de 3</div>
+        <h2 class="onb-title" data-i18n="step2-title">O que você quer aprender?</h2>
+        <p class="onb-subtitle" data-i18n="step2-sub">Escolha uma categoria ou digite outro tema.</p>
+        <div class="topic-grid">
+          <div class="topic-card" onclick="selectTopic('💻 Programação')">
+            <span class="topic-card-icon">💻</span>
+            <span data-i18n="topic-programming">Programação</span>
+          </div>
+          <div class="topic-card" onclick="selectTopic('📐 Matemática')">
+            <span class="topic-card-icon">📐</span>
+            <span data-i18n="topic-math">Matemática</span>
+          </div>
+          <div class="topic-card" onclick="selectTopic('🇺🇸 Inglês')">
+            <span class="topic-card-icon">🇺🇸</span>
+            <span data-i18n="topic-english">Inglês</span>
+          </div>
+          <div class="topic-card" onclick="selectTopic('🔬 Ciências')">
+            <span class="topic-card-icon">🔬</span>
+            <span data-i18n="topic-science">Ciências</span>
+          </div>
+          <div class="topic-card" onclick="selectTopic('🎵 Música')">
+            <span class="topic-card-icon">🎵</span>
+            <span data-i18n="topic-music">Música</span>
+          </div>
+          <div class="topic-card" onclick="selectTopic('📜 História')">
+            <span class="topic-card-icon">📜</span>
+            <span data-i18n="topic-history">História</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label data-i18n="topic-other">Ou digite outro tema...</label>
+          <input type="text" id="topicInput" data-i18n-ph="topic-other-ph" placeholder="Ex.: Fotografia, cozinha, xadrez...">
+        </div>
+        <div class="onb-actions">
+          <button class="btn" onclick="showStep(1)" data-i18n="back">← Voltar</button>
+          <button class="btn btn-primary" onclick="goToStep3()" data-i18n="next">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Level -->
+      <div id="step3" style="display:none;">
+        <div class="onb-step" data-i18n="step-3-of-3">Passo 3 de 3</div>
+        <h2 class="onb-title" data-i18n="step3-title">Qual seu nível?</h2>
+        <p class="onb-subtitle" data-i18n="step3-sub">Isso ajuda a IA calibrar as explicações.</p>
+        <div class="topic-grid">
+          <div class="topic-card" onclick="selectLevel('beginner')">
+            <span class="topic-card-icon">🌱</span>
+            <span data-i18n="level-beginner">Iniciante</span>
+          </div>
+          <div class="topic-card" onclick="selectLevel('intermediate')">
+            <span class="topic-card-icon">🌿</span>
+            <span data-i18n="level-intermediate">Intermediário</span>
+          </div>
+          <div class="topic-card" onclick="selectLevel('advanced')">
+            <span class="topic-card-icon">🌳</span>
+            <span data-i18n="level-advanced">Avançado</span>
+          </div>
+        </div>
+        <div class="onb-actions">
+          <button class="btn" onclick="showStep(2)" data-i18n="back">← Voltar</button>
+          <button class="btn btn-primary" onclick="startLearning()" data-i18n="start-learning">🚀 Começar a aprender</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-layout" id="chatScreen" style="display:none;">
+    <div class="chat-header">
+      <div class="chat-info">
+        <div class="chat-info-icon" id="chatIcon">🎓</div>
+        <div>
+          <h3 id="chatTopic">—</h3>
+          <p id="chatSubtitle">—</p>
+        </div>
+      </div>
+      <div class="chat-stats">
+        <div><strong id="msgCount">0</strong> mensagens</div>
+        <div><strong id="sessionTime">0min</strong></div>
+      </div>
+    </div>
+
+    <div class="tools-drawer" id="toolsDrawer">
+      <div class="tools-title" data-i18n="study-tools">Ferramentas de estudo</div>
+      <div class="tools-grid">
+        <button class="tool-btn" onclick="useTool('summary')">
+          <span class="tool-btn-icon">📝</span>
+          <span data-i18n="tool-summary">Resumo</span>
+        </button>
+        <button class="tool-btn" onclick="useTool('quiz')">
+          <span class="tool-btn-icon">❓</span>
+          <span data-i18n="tool-quiz">Quiz</span>
+        </button>
+        <button class="tool-btn" onclick="useTool('flashcards')">
+          <span class="tool-btn-icon">🃏</span>
+          <span data-i18n="tool-flashcards">Flashcards</span>
+        </button>
+        <button class="tool-btn" onclick="useTool('analogy')">
+          <span class="tool-btn-icon">💡</span>
+          <span data-i18n="tool-analogy">Analogia</span>
+        </button>
+        <button class="tool-btn" onclick="useTool('feynman')">
+          <span class="tool-btn-icon">🧑‍🏫</span>
+          <span data-i18n="tool-feynman">Explicação Feynman</span>
+        </button>
+        <button class="tool-btn" onclick="useTool('exercise')">
+          <span class="tool-btn-icon">✏️</span>
+          <span data-i18n="tool-exercise">Exercício</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <div class="suggestions" id="suggestions"></div>
+
+    <div class="chat-input-area">
+      <textarea id="chatInput" data-i18n-ph="chat-ph" placeholder="Pergunte qualquer coisa..." rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+
+  <footer>
+    <span data-i18n="footer-made">Feito com</span> 💜 <span data-i18n="footer-by">por</span> <a href="https://github.com/lukepalys" target="_blank" rel="noopener">LukePalys</a> • <span data-i18n="footer-tech">Pollinations AI · 100% no navegador</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== I18N =====================
+const I18N = {
+  'pt-BR': {
+    tagline: 'Aprenda qualquer coisa com IA',
+    'welcome-title': 'Aprenda qualquer coisa com IA',
+    'welcome-desc': 'Sua tutora pessoal de IA. Defina o que quer aprender, escolha o nível e comece a conversar. A IA vai te guiar, explicar, criar exercícios e te ajudar a dominar qualquer assunto no seu ritmo.',
+    start: 'Começar agora',
+    'feat-1-title': 'IA tutora personalizada',
+    'feat-1-desc': 'Adapta o ensino ao seu nível e ritmo de aprendizado.',
+    'feat-2-title': 'Qualquer assunto',
+    'feat-2-desc': 'Programação, matemática, idiomas, ciências, música e muito mais.',
+    'feat-3-title': 'Ferramentas de estudo',
+    'feat-3-desc': 'Resumos, quizzes, flashcards, analogias e explicações Feynman.',
+    'feat-4-title': '100% no navegador',
+    'feat-4-desc': 'Sem login, sem servidor. Suas conversas ficam no seu dispositivo.',
+    'step-1-of-3': 'Passo 1 de 3',
+    'step1-title': 'Como podemos te chamar?',
+    'step1-sub': 'Pode ser seu nome, apelido ou qualquer coisa que você goste.',
+    'step1-ph': 'Seu nome (ou apelido)',
+    'step-2-of-3': 'Passo 2 de 3',
+    'step2-title': 'O que você quer aprender?',
+    'step2-sub': 'Escolha uma categoria ou digite outro tema.',
+    'topic-programming': 'Programação',
+    'topic-math': 'Matemática',
+    'topic-english': 'Inglês',
+    'topic-science': 'Ciências',
+    'topic-music': 'Música',
+    'topic-history': 'História',
+    'topic-other': 'Ou digite outro tema...',
+    'topic-other-ph': 'Ex.: Fotografia, cozinha, xadrez...',
+    'step-3-of-3': 'Passo 3 de 3',
+    'step3-title': 'Qual seu nível?',
+    'step3-sub': 'Isso ajuda a IA calibrar as explicações.',
+    'level-beginner': 'Iniciante',
+    'level-intermediate': 'Intermediário',
+    'level-advanced': 'Avançado',
+    'start-learning': '🚀 Começar a aprender',
+    back: '← Voltar',
+    next: 'Próximo →',
+    'study-tools': 'Ferramentas de estudo',
+    'tool-summary': 'Resumo',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogia',
+    'tool-feynman': 'Explicação Feynman',
+    'tool-exercise': 'Exercício',
+    'chat-ph': 'Pergunte qualquer coisa...',
+    'footer-made': 'Feito com',
+    'footer-by': 'por',
+    'footer-tech': 'Pollinations AI · 100% no navegador',
+    greeting: 'Oi {name}! 👋 Eu sou sua tutora de IA. Vamos aprender sobre **{topic}** juntos. Como você quer começar? Posso te explicar um conceito, fazer um quiz, criar flashcards ou qualquer outra coisa — é só pedir!',
+    'need-name': 'Digite seu nome primeiro 🙂',
+    'need-topic': 'Escolha um tema ou digite um 🙂',
+    'need-level': 'Escolha seu nível 🙂',
+    'failed': 'Tive um problema pra responder. Tenta de novo em alguns segundos.',
+    'thinking': 'pensando...',
+  },
+  en: {
+    tagline: 'Learn anything with AI',
+    'welcome-title': 'Learn anything with AI',
+    'welcome-desc': 'Your personal AI tutor. Set what you want to learn, pick your level and start chatting. The AI will guide you, explain, create exercises and help you master any subject at your own pace.',
+    start: 'Start now',
+    'feat-1-title': 'Personalized AI tutor',
+    'feat-1-desc': 'Adapts teaching to your level and learning pace.',
+    'feat-2-title': 'Any subject',
+    'feat-2-desc': 'Programming, math, languages, sciences, music and much more.',
+    'feat-3-title': 'Study tools',
+    'feat-3-desc': 'Summaries, quizzes, flashcards, analogies and Feynman explanations.',
+    'feat-4-title': '100% in browser',
+    'feat-4-desc': 'No login, no server. Your conversations stay on your device.',
+    'step-1-of-3': 'Step 1 of 3',
+    'step1-title': 'What should we call you?',
+    'step1-sub': 'Your name, nickname or anything you like.',
+    'step1-ph': 'Your name (or nickname)',
+    'step-2-of-3': 'Step 2 of 3',
+    'step2-title': 'What do you want to learn?',
+    'step2-sub': 'Pick a category or type another topic.',
+    'topic-programming': 'Programming',
+    'topic-math': 'Math',
+    'topic-english': 'English',
+    'topic-science': 'Science',
+    'topic-music': 'Music',
+    'topic-history': 'History',
+    'topic-other': 'Or type another topic...',
+    'topic-other-ph': 'E.g.: Photography, cooking, chess...',
+    'step-3-of-3': 'Step 3 of 3',
+    'step3-title': 'What\'s your level?',
+    'step3-sub': 'This helps the AI calibrate explanations.',
+    'level-beginner': 'Beginner',
+    'level-intermediate': 'Intermediate',
+    'level-advanced': 'Advanced',
+    'start-learning': '🚀 Start learning',
+    back: '← Back',
+    next: 'Next →',
+    'study-tools': 'Study tools',
+    'tool-summary': 'Summary',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogy',
+    'tool-feynman': 'Feynman explanation',
+    'tool-exercise': 'Exercise',
+    'chat-ph': 'Ask anything...',
+    'footer-made': 'Made with',
+    'footer-by': 'by',
+    'footer-tech': 'Pollinations AI · 100% in browser',
+    greeting: 'Hi {name}! 👋 I\'m your AI tutor. Let\'s learn about **{topic}** together. How do you want to start? I can explain a concept, give you a quiz, create flashcards or anything else — just ask!',
+    'need-name': 'Please enter your name first 🙂',
+    'need-topic': 'Pick a topic or type one 🙂',
+    'need-level': 'Pick your level 🙂',
+    'failed': 'I had trouble responding. Try again in a few seconds.',
+    'thinking': 'thinking...',
+  },
+  es: {
+    tagline: 'Aprende cualquier cosa con IA',
+    'welcome-title': 'Aprende cualquier cosa con IA',
+    'welcome-desc': 'Tu tutor personal de IA. Define qué quieres aprender, elige tu nivel y empieza a chatear. La IA te guiará, explicará, creará ejercicios y te ayudará a dominar cualquier tema a tu ritmo.',
+    start: 'Empezar ahora',
+    'feat-1-title': 'Tutor IA personalizado',
+    'feat-1-desc': 'Adapta la enseñanza a tu nivel y ritmo.',
+    'feat-2-title': 'Cualquier tema',
+    'feat-2-desc': 'Programación, matemáticas, idiomas, ciencias, música y más.',
+    'feat-3-title': 'Herramientas de estudio',
+    'feat-3-desc': 'Resúmenes, quizzes, flashcards, analogías y explicaciones Feynman.',
+    'feat-4-title': '100% en el navegador',
+    'feat-4-desc': 'Sin login, sin servidor. Tus conversaciones quedan en tu dispositivo.',
+    'step-1-of-3': 'Paso 1 de 3',
+    'step1-title': '¿Cómo te llamamos?',
+    'step1-sub': 'Tu nombre, apodo o lo que prefieras.',
+    'step1-ph': 'Tu nombre (o apodo)',
+    'step-2-of-3': 'Paso 2 de 3',
+    'step2-title': '¿Qué quieres aprender?',
+    'step2-sub': 'Elige una categoría o escribe otro tema.',
+    'topic-programming': 'Programación',
+    'topic-math': 'Matemáticas',
+    'topic-english': 'Inglés',
+    'topic-science': 'Ciencias',
+    'topic-music': 'Música',
+    'topic-history': 'Historia',
+    'topic-other': 'O escribe otro tema...',
+    'topic-other-ph': 'Ej.: Fotografía, cocina, ajedrez...',
+    'step-3-of-3': 'Paso 3 de 3',
+    'step3-title': '¿Cuál es tu nivel?',
+    'step3-sub': 'Esto ayuda a calibrar las explicaciones.',
+    'level-beginner': 'Principiante',
+    'level-intermediate': 'Intermedio',
+    'level-advanced': 'Avanzado',
+    'start-learning': '🚀 Empezar a aprender',
+    back: '← Atrás',
+    next: 'Siguiente →',
+    'study-tools': 'Herramientas de estudio',
+    'tool-summary': 'Resumen',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogía',
+    'tool-feynman': 'Explicación Feynman',
+    'tool-exercise': 'Ejercicio',
+    'chat-ph': 'Pregunta cualquier cosa...',
+    'footer-made': 'Hecho con',
+    'footer-by': 'por',
+    'footer-tech': 'Pollinations AI · 100% en el navegador',
+    greeting: '¡Hola {name}! 👋 Soy tu tutor de IA. Vamos a aprender sobre **{topic}** juntos. ¿Cómo quieres empezar? Puedo explicar un concepto, hacer un quiz, crear flashcards o lo que necesites — ¡solo pídelo!',
+    'need-name': 'Escribe tu nombre primero 🙂',
+    'need-topic': 'Elige un tema o escribe uno 🙂',
+    'need-level': 'Elige tu nivel 🙂',
+    'failed': 'Tuve un problema al responder. Intenta de nuevo en unos segundos.',
+    'thinking': 'pensando...',
+  },
+  fr: {
+    tagline: 'Apprenez tout avec l\'IA',
+    'welcome-title': 'Apprenez tout avec l\'IA',
+    'welcome-desc': 'Votre tuteur IA personnel. Définissez ce que vous voulez apprendre, choisissez votre niveau et commencez à discuter. L\'IA vous guidera, expliquera, créera des exercices et vous aidera à maîtriser tout sujet à votre rythme.',
+    start: 'Commencer',
+    'feat-1-title': 'Tuteur IA personnalisé',
+    'feat-1-desc': 'Adapte l\'enseignement à votre niveau et rythme.',
+    'feat-2-title': 'N\'importe quel sujet',
+    'feat-2-desc': 'Programmation, maths, langues, sciences, musique et plus.',
+    'feat-3-title': 'Outils d\'étude',
+    'feat-3-desc': 'Résumés, quiz, flashcards, analogies et explications Feynman.',
+    'feat-4-title': '100% dans le navigateur',
+    'feat-4-desc': 'Pas de login, pas de serveur. Vos conversations restent sur votre appareil.',
+    'step-1-of-3': 'Étape 1 sur 3',
+    'step1-title': 'Comment vous appeler ?',
+    'step1-sub': 'Votre nom, surnom ou ce que vous aimez.',
+    'step1-ph': 'Votre nom (ou surnom)',
+    'step-2-of-3': 'Étape 2 sur 3',
+    'step2-title': 'Que voulez-vous apprendre ?',
+    'step2-sub': 'Choisissez une catégorie ou tapez un autre sujet.',
+    'topic-programming': 'Programmation',
+    'topic-math': 'Maths',
+    'topic-english': 'Anglais',
+    'topic-science': 'Sciences',
+    'topic-music': 'Musique',
+    'topic-history': 'Histoire',
+    'topic-other': 'Ou tapez un autre sujet...',
+    'topic-other-ph': 'Ex. : Photographie, cuisine, échecs...',
+    'step-3-of-3': 'Étape 3 sur 3',
+    'step3-title': 'Quel est votre niveau ?',
+    'step3-sub': 'Cela aide l\'IA à calibrer les explications.',
+    'level-beginner': 'Débutant',
+    'level-intermediate': 'Intermédiaire',
+    'level-advanced': 'Avancé',
+    'start-learning': '🚀 Commencer à apprendre',
+    back: '← Retour',
+    next: 'Suivant →',
+    'study-tools': 'Outils d\'étude',
+    'tool-summary': 'Résumé',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogie',
+    'tool-feynman': 'Explication Feynman',
+    'tool-exercise': 'Exercice',
+    'chat-ph': 'Posez n\'importe quelle question...',
+    'footer-made': 'Fait avec',
+    'footer-by': 'par',
+    'footer-tech': 'Pollinations AI · 100% navigateur',
+    greeting: 'Salut {name}! 👋 Je suis votre tuteur IA. Apprenons **{topic}** ensemble. Comment voulez-vous commencer? Je peux expliquer un concept, faire un quiz, créer des flashcards ou autre — demandez!',
+    'need-name': 'Tapez votre nom d\'abord 🙂',
+    'need-topic': 'Choisissez un sujet ou tapez-en un 🙂',
+    'need-level': 'Choisissez votre niveau 🙂',
+    'failed': 'Problème de réponse. Réessayez dans quelques secondes.',
+    'thinking': 'réflexion...',
+  },
+  de: {
+    tagline: 'Lerne alles mit KI',
+    'welcome-title': 'Lerne alles mit KI',
+    'welcome-desc': 'Ihr persönlicher KI-Tutor. Legen Sie fest, was Sie lernen möchten, wählen Sie Ihr Level und beginnen Sie zu chatten. Die KI wird Sie führen, erklären, Übungen erstellen und Ihnen helfen, jedes Thema in Ihrem Tempo zu meistern.',
+    start: 'Jetzt starten',
+    'feat-1-title': 'Personalisierter KI-Tutor',
+    'feat-1-desc': 'Passt den Unterricht an Ihr Niveau und Tempo an.',
+    'feat-2-title': 'Jedes Thema',
+    'feat-2-desc': 'Programmierung, Mathe, Sprachen, Wissenschaft, Musik und mehr.',
+    'feat-3-title': 'Lernwerkzeuge',
+    'feat-3-desc': 'Zusammenfassungen, Quiz, Flashcards, Analogien und Feynman-Erklärungen.',
+    'feat-4-title': '100% im Browser',
+    'feat-4-desc': 'Kein Login, kein Server. Ihre Gespräche bleiben auf Ihrem Gerät.',
+    'step-1-of-3': 'Schritt 1 von 3',
+    'step1-title': 'Wie sollen wir Sie nennen?',
+    'step1-sub': 'Ihr Name, Spitzname oder was Sie mögen.',
+    'step1-ph': 'Ihr Name (oder Spitzname)',
+    'step-2-of-3': 'Schritt 2 von 3',
+    'step2-title': 'Was wollen Sie lernen?',
+    'step2-sub': 'Wählen Sie eine Kategorie oder tippen Sie ein anderes Thema.',
+    'topic-programming': 'Programmierung',
+    'topic-math': 'Mathe',
+    'topic-english': 'Englisch',
+    'topic-science': 'Wissenschaft',
+    'topic-music': 'Musik',
+    'topic-history': 'Geschichte',
+    'topic-other': 'Oder tippen Sie ein anderes Thema...',
+    'topic-other-ph': 'z.B.: Fotografie, Kochen, Schach...',
+    'step-3-of-3': 'Schritt 3 von 3',
+    'step3-title': 'Was ist Ihr Level?',
+    'step3-sub': 'Das hilft der KI, Erklärungen zu kalibrieren.',
+    'level-beginner': 'Anfänger',
+    'level-intermediate': 'Mittelstufe',
+    'level-advanced': 'Fortgeschritten',
+    'start-learning': '🚀 Loslegen',
+    back: '← Zurück',
+    next: 'Weiter →',
+    'study-tools': 'Lernwerkzeuge',
+    'tool-summary': 'Zusammenfassung',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogie',
+    'tool-feynman': 'Feynman-Erklärung',
+    'tool-exercise': 'Übung',
+    'chat-ph': 'Fragen Sie alles...',
+    'footer-made': 'Gemacht mit',
+    'footer-by': 'von',
+    'footer-tech': 'Pollinations AI · 100% im Browser',
+    greeting: 'Hi {name}! 👋 Ich bin Ihr KI-Tutor. Lassen Sie uns **{topic}** zusammen lernen. Wie wollen Sie beginnen? Ich kann ein Konzept erklären, ein Quiz machen, Flashcards erstellen oder anderes — fragen Sie!',
+    'need-name': 'Bitte zuerst Namen eingeben 🙂',
+    'need-topic': 'Thema wählen oder eingeben 🙂',
+    'need-level': 'Level wählen 🙂',
+    'failed': 'Problem beim Antworten. In wenigen Sekunden erneut versuchen.',
+    'thinking': 'denkt...',
+  },
+  it: {
+    tagline: 'Impara tutto con l\'IA',
+    'welcome-title': 'Impara tutto con l\'IA',
+    'welcome-desc': 'Il tuo tutor IA personale. Definisci cosa vuoi imparare, scegli il livello e inizia a chattare. L\'IA ti guiderà, spiegherà, creerà esercizi e ti aiuterà a padroneggiare qualsiasi argomento a tuo ritmo.',
+    start: 'Inizia ora',
+    'feat-1-title': 'Tutor IA personalizzato',
+    'feat-1-desc': 'Adapta l\'insegnamento al tuo livello e ritmo.',
+    'feat-2-title': 'Qualsiasi argomento',
+    'feat-2-desc': 'Programmazione, matematica, lingue, scienze, musica e altro.',
+    'feat-3-title': 'Strumenti di studio',
+    'feat-3-desc': 'Riassunti, quiz, flashcards, analogie e spiegazioni Feynman.',
+    'feat-4-title': '100% nel browser',
+    'feat-4-desc': 'Senza login, senza server. Le conversazioni restano sul tuo dispositivo.',
+    'step-1-of-3': 'Passo 1 di 3',
+    'step1-title': 'Come ti chiamiamo?',
+    'step1-sub': 'Il tuo nome, nickname o quello che preferisci.',
+    'step1-ph': 'Il tuo nome (o nickname)',
+    'step-2-of-3': 'Passo 2 di 3',
+    'step2-title': 'Cosa vuoi imparare?',
+    'step2-sub': 'Scegli una categoria o digita un altro argomento.',
+    'topic-programming': 'Programmazione',
+    'topic-math': 'Matematica',
+    'topic-english': 'Inglese',
+    'topic-science': 'Scienze',
+    'topic-music': 'Musica',
+    'topic-history': 'Storia',
+    'topic-other': 'O digita un altro argomento...',
+    'topic-other-ph': 'Es.: Fotografia, cucina, scacchi...',
+    'step-3-of-3': 'Passo 3 di 3',
+    'step3-title': 'Qual è il tuo livello?',
+    'step3-sub': 'Questo aiuta l\'IA a calibrare le spiegazioni.',
+    'level-beginner': 'Principiante',
+    'level-intermediate': 'Intermedio',
+    'level-advanced': 'Avanzato',
+    'start-learning': '🚀 Inizia a imparare',
+    back: '← Indietro',
+    next: 'Avanti →',
+    'study-tools': 'Strumenti di studio',
+    'tool-summary': 'Riassunto',
+    'tool-quiz': 'Quiz',
+    'tool-flashcards': 'Flashcards',
+    'tool-analogy': 'Analogia',
+    'tool-feynman': 'Spiegazione Feynman',
+    'tool-exercise': 'Esercizio',
+    'chat-ph': 'Chiedi qualsiasi cosa...',
+    'footer-made': 'Fatto con',
+    'footer-by': 'da',
+    'footer-tech': 'Pollinations AI · 100% nel browser',
+    greeting: 'Ciao {name}! 👋 Sono il tuo tutor IA. Impariamo **{topic}** insieme. Come vuoi iniziare? Posso spiegare un concetto, fare un quiz, creare flashcards o altro — chiedi!',
+    'need-name': 'Inserisci prima il nome 🙂',
+    'need-topic': 'Scegli un argomento o digita 🙂',
+    'need-level': 'Scegli il livello 🙂',
+    'failed': 'Problema nella risposta. Riprova tra pochi secondi.',
+    'thinking': 'penso...',
+  },
+  ja: {
+    tagline: 'AIで何でも学べる',
+    'welcome-title': 'AIで何でも学べる',
+    'welcome-desc': 'あなた専属のAIチューター。学びたいことを設定し、レベルを選んでチャットを始めましょう。AIがガイドし、説明し、練習問題を作成し、自分のペースでどんな科目でもマスターできるようサポートします。',
+    start: '今すぐ始める',
+    'feat-1-title': 'パーソナライズAIチューター',
+    'feat-1-desc': 'あなたのレベルとペースに合わせて教えます。',
+    'feat-2-title': 'どんな科目でも',
+    'feat-2-desc': 'プログラミング、数学、語学、科学、音楽など。',
+    'feat-3-title': '学習ツール',
+    'feat-3-desc': '要約、クイズ、フラッシュカード、アナロジー、ファインマン説明。',
+    'feat-4-title': '100%ブラウザ内',
+    'feat-4-desc': 'ログイン不要、サーバーなし。会話はデバイスに残ります。',
+    'step-1-of-3': 'ステップ 1/3',
+    'step1-title': '何と呼べばいいですか？',
+    'step1-sub': '名前、ニックネーム、何でも構いません。',
+    'step1-ph': 'あなたの名前（またはニックネーム）',
+    'step-2-of-3': 'ステップ 2/3',
+    'step2-title': '何を学びたいですか？',
+    'step2-sub': 'カテゴリーを選ぶか、他のテーマを入力してください。',
+    'topic-programming': 'プログラミング',
+    'topic-math': '数学',
+    'topic-english': '英語',
+    'topic-science': '科学',
+    'topic-music': '音楽',
+    'topic-history': '歴史',
+    'topic-other': 'または他のテーマを入力...',
+    'topic-other-ph': '例：写真、料理、チェス...',
+    'step-3-of-3': 'ステップ 3/3',
+    'step3-title': 'レベルは？',
+    'step3-sub': 'AIが説明を調整するのに役立ちます。',
+    'level-beginner': '初級',
+    'level-intermediate': '中級',
+    'level-advanced': '上級',
+    'start-learning': '🚀 学習開始',
+    back: '← 戻る',
+    next: '次へ →',
+    'study-tools': '学習ツール',
+    'tool-summary': '要約',
+    'tool-quiz': 'クイズ',
+    'tool-flashcards': 'フラッシュカード',
+    'tool-analogy': 'アナロジー',
+    'tool-feynman': 'ファインマン説明',
+    'tool-exercise': '練習問題',
+    'chat-ph': '何でも聞いてください...',
+    'footer-made': '作成:',
+    'footer-by': '',
+    'footer-tech': 'Pollinations AI · 100%ブラウザ内',
+    greeting: 'やあ{name}! 👋 私はAIチューターです。一緒に**{topic}**を学びましょう。どう始めますか？概念の説明、クイズ、フラッシュカード作成など何でも — どうぞ！',
+    'need-name': 'まず名前を入力してください 🙂',
+    'need-topic': 'テーマを選ぶか入力してください 🙂',
+    'need-level': 'レベルを選んでください 🙂',
+    'failed': '応答に問題が発生しました。数秒後に再試行してください。',
+    'thinking': '考え中...',
+  },
+  'zh-CN': {
+    tagline: '用 AI 学任何东西',
+    'welcome-title': '用 AI 学任何东西',
+    'welcome-desc': '您的个人 AI 导师。设置想学的内容、选择水平并开始聊天。AI 会引导您、解释、创建练习，帮助您按自己的节奏掌握任何主题。',
+    start: '立即开始',
+    'feat-1-title': '个性化 AI 导师',
+    'feat-1-desc': '根据您的水平和节奏调整教学。',
+    'feat-2-title': '任何主题',
+    'feat-2-desc': '编程、数学、语言、科学、音乐等。',
+    'feat-3-title': '学习工具',
+    'feat-3-desc': '摘要、测验、闪卡、类比和费曼解释。',
+    'feat-4-title': '100% 在浏览器中',
+    'feat-4-desc': '无需登录，无需服务器。对话留在您的设备上。',
+    'step-1-of-3': '步骤 1/3',
+    'step1-title': '我们该怎么称呼您？',
+    'step1-sub': '您的名字、昵称或喜欢的称呼。',
+    'step1-ph': '您的名字（或昵称）',
+    'step-2-of-3': '步骤 2/3',
+    'step2-title': '您想学什么？',
+    'step2-sub': '选择一个类别或输入另一个主题。',
+    'topic-programming': '编程',
+    'topic-math': '数学',
+    'topic-english': '英语',
+    'topic-science': '科学',
+    'topic-music': '音乐',
+    'topic-history': '历史',
+    'topic-other': '或输入另一个主题...',
+    'topic-other-ph': '例如：摄影、烹饪、国际象棋...',
+    'step-3-of-3': '步骤 3/3',
+    'step3-title': '您的水平？',
+    'step3-sub': '这有助于 AI 校准解释。',
+    'level-beginner': '初级',
+    'level-intermediate': '中级',
+    'level-advanced': '高级',
+    'start-learning': '🚀 开始学习',
+    back: '← 返回',
+    next: '下一个 →',
+    'study-tools': '学习工具',
+    'tool-summary': '摘要',
+    'tool-quiz': '测验',
+    'tool-flashcards': '闪卡',
+    'tool-analogy': '类比',
+    'tool-feynman': '费曼解释',
+    'tool-exercise': '练习',
+    'chat-ph': '问任何问题...',
+    'footer-made': '用',
+    'footer-by': '由',
+    'footer-tech': 'Pollinations AI · 100% 浏览器内',
+    greeting: '嗨 {name}! 👋 我是您的 AI 导师。让我们一起学习 **{topic}**。您想如何开始？我可以解释概念、做测验、创建闪卡等 — 尽管问！',
+    'need-name': '请先输入您的名字 🙂',
+    'need-topic': '请选择或输入主题 🙂',
+    'need-level': '请选择水平 🙂',
+    'failed': '回复出错了。请几秒后重试。',
+    'thinking': '思考中...',
+  }
+};
+
+function t(key, vars) {
+  const lang = document.documentElement.lang || 'pt-BR';
+  let str = (I18N[lang] && I18N[lang][key]) || I18N['en'][key] || key;
+  if (vars) {
+    Object.keys(vars).forEach(k => {
+      str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), vars[k]);
+    });
+  }
+  return str;
+}
+
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    el.placeholder = t(key);
+  });
+  document.title = 'LearnFlow — ' + t('tagline');
+}
+
+// ===================== STATE =====================
+let session = {
+  name: '',
+  topic: '',
+  level: '',
+  messages: [],
+  startTime: null,
+};
+let selectedTopic = '';
+let selectedLevel = '';
+let isThinking = false;
+
+// ===================== AI CALL =====================
+async function callAI(messages) {
+  const res = await fetch('https://text.pollinations.ai/openai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'openai-fast',
+      messages,
+      temperature: 0.7,
+      max_tokens: 1500,
+    }),
+  });
+  if (!res.ok) throw new Error('Pollinations: ' + res.status);
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+function buildSystemPrompt() {
+  const lang = document.documentElement.lang || 'pt-BR';
+  const langName = { 'pt-BR': 'Portuguese (Brazil)', en: 'English', es: 'Spanish', fr: 'French', de: 'German', it: 'Italian', ja: 'Japanese', 'zh-CN': 'Chinese (Simplified)' }[lang] || 'English';
+  const levelName = { beginner: t('level-beginner'), intermediate: t('level-intermediate'), advanced: t('level-advanced') }[session.level];
+
+  return `You are LearnFlow AI, a personal tutor. The student's name is ${session.name}. They want to learn about ${session.topic} at ${levelName} level. Always respond in ${langName}.
+
+Your role:
+- Be a supportive, patient, encouraging tutor
+- Adapt explanations to ${levelName} level — not too basic, not too advanced
+- Use markdown formatting (bold, lists, code blocks when relevant)
+- When the student asks about something outside ${session.topic}, briefly answer and gently bring them back
+- Encourage questions and curiosity
+- Use analogies and examples from everyday life
+- When they make a mistake, correct gently and explain why
+- Keep responses concise (max 4-5 paragraphs) unless they ask for depth
+- If they ask for a quiz, create 3-5 questions and wait for their answer before grading
+- If they ask for flashcards, format as cards with front (question) and back (answer)
+- If they ask for a summary, give a structured overview of key points
+- Use emojis sparingly (1-2 per response max) to add warmth
+
+Today's session started fresh. Be warm and energetic.`;
+}
+
+// ===================== NAVIGATION =====================
+function goHome() {
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('onboardingScreen').style.display = 'none';
+  document.getElementById('chatScreen').style.display = 'none';
+}
+
+function startOnboarding() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('onboardingScreen').style.display = 'flex';
+  document.getElementById('chatScreen').style.display = 'none';
+  showStep(1);
+  setTimeout(() => document.getElementById('nameInput').focus(), 100);
+}
+
+function showStep(n) {
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('step' + i).style.display = i === n ? 'block' : 'none';
+  }
+}
+
+function goToStep2() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    showToast(t('need-name'));
+    return;
+  }
+  session.name = name;
+  showStep(2);
+  setTimeout(() => document.getElementById('topicInput').focus(), 100);
+}
+
+function goToStep3() {
+  const customTopic = document.getElementById('topicInput').value.trim();
+  if (!selectedTopic && !customTopic) {
+    showToast(t('need-topic'));
+    return;
+  }
+  session.topic = customTopic || selectedTopic;
+  showStep(3);
+}
+
+function selectTopic(topic) {
+  selectedTopic = topic;
+  document.querySelectorAll('#step2 .topic-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  document.getElementById('topicInput').value = '';
+}
+
+function selectLevel(level) {
+  selectedLevel = level;
+  document.querySelectorAll('#step3 .topic-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function startLearning() {
+  if (!selectedLevel) {
+    showToast(t('need-level'));
+    return;
+  }
+  session.level = selectedLevel;
+  session.startTime = Date.now();
+  session.messages = [];
+
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('onboardingScreen').style.display = 'none';
+  document.getElementById('chatScreen').style.display = 'flex';
+
+  // Update header
+  document.getElementById('chatTopic').textContent = session.topic;
+  document.getElementById('chatSubtitle').textContent = `${session.name} · ${t('level-' + session.level)}`;
+  document.getElementById('chatIcon').textContent = session.topic.split(' ')[0];
+
+  // Add greeting from AI
+  const greeting = t('greeting', { name: session.name, topic: session.topic });
+  addMessage('ai', greeting);
+
+  // Show suggestion chips
+  showSuggestions();
+}
+
+// ===================== CHAT =====================
+function addMessage(role, content) {
+  session.messages.push({ role, content });
+
+  const container = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'message ' + role;
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = role === 'user' ? '🧑' : '🤖';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = formatMarkdown(content);
+
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+
+  document.getElementById('msgCount').textContent = session.messages.filter(m => m.role === 'user').length;
+}
+
+function formatMarkdown(text) {
+  // Basic markdown: bold, code blocks, inline code, line breaks
+  let html = escapeHtml(text);
+  // Code blocks
+  html = html.replace(/```(\w+)?\n?([\s\S]*?)```/g, (m, lang, code) => `<pre><code>${code.trim()}</code></pre>`);
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Bold
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  // Line breaks
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function showSuggestions() {
+  const suggestions = [
+    t('tool-summary') + ' ↗',
+    t('tool-quiz') + ' ↗',
+    t('tool-analogy') + ' ↗',
+    t('tool-exercise') + ' ↗',
+  ];
+  const container = document.getElementById('suggestions');
+  container.innerHTML = '';
+  suggestions.forEach(s => {
+    const chip = document.createElement('button');
+    chip.className = 'suggestion-chip';
+    chip.textContent = s;
+    chip.onclick = () => {
+      const tool = s.split(' ')[0].toLowerCase();
+      const toolMap = {
+        [t('tool-summary').toLowerCase()]: 'summary',
+        [t('tool-quiz').toLowerCase()]: 'quiz',
+        [t('tool-analogy').toLowerCase()]: 'analogy',
+        [t('tool-exercise').toLowerCase()]: 'exercise',
+      };
+      useTool(toolMap[tool] || 'summary');
+    };
+    container.appendChild(chip);
+  });
+}
+
+function showTyping() {
+  const container = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'message ai';
+  msg.id = 'typingIndicator';
+  msg.innerHTML = `
+    <div class="msg-avatar">🤖</div>
+    <div class="msg-bubble">
+      <div class="typing"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typingIndicator');
+  if (t) t.remove();
+}
+
+async function sendMessage(text) {
+  if (isThinking) return;
+  const input = document.getElementById('chatInput');
+  const message = text || input.value.trim();
+  if (!message) return;
+
+  addMessage('user', message);
+  input.value = '';
+  autoResize(input);
+  document.getElementById('suggestions').innerHTML = '';
+
+  isThinking = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const aiMessages = [
+      { role: 'system', content: buildSystemPrompt() },
+      ...session.messages.map(m => ({
+        role: m.role === 'user' ? 'user' : 'assistant',
+        content: m.content,
+      })),
+    ];
+
+    const reply = await callAI(aiMessages);
+    hideTyping();
+    addMessage('ai', reply);
+  } catch (err) {
+    console.error('AI error:', err);
+    hideTyping();
+    addMessage('ai', '⚠️ ' + t('failed'));
+  } finally {
+    isThinking = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
+}
+
+function useTool(tool) {
+  const prompts = {
+    summary: `Faça um resumo estruturado dos principais conceitos de ${session.topic} que eu deveria saber no nível ${t('level-' + session.level)}. Use headings, listas e destaques em negrito.`,
+    quiz: `Crie um quiz com 3-5 perguntas sobre ${session.topic} (nível ${t('level-' + session.level)}). Múltipla escolha com 4 alternativas cada. NÃO me dê as respostas ainda — espere eu responder primeiro.`,
+    flashcards: `Crie 5 flashcards sobre ${session.topic} (nível ${t('level-' + session.level)}). Formato: frente (pergunta/conceito) e verso (resposta). Use markdown com **Frente:** e **Verso:**.`,
+    analogy: `Me explique ${session.topic} usando uma analogia do dia a dia que eu consigo visualizar. Seja criativo e específico.`,
+    feynman: `Use a técnica Feynman: me explique ${session.topic} como se eu fosse uma criança de 10 anos. Sem jargões, sem complicar. Depois me diga o que ficou faltando na explicação simples.`,
+    exercise: `Crie um exercício prático sobre ${session.topic} (nível ${t('level-' + session.level)}). Algo que eu possa tentar resolver agora. Depois de eu responder, me dê feedback.`,
+  };
+  sendMessage(prompts[tool] || prompts.summary);
+  document.getElementById('toolsDrawer').classList.remove('show');
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+}
+
+function toggleTools() {
+  document.getElementById('toolsDrawer').classList.toggle('show');
+}
+
+function resetSession() {
+  if (!confirm('Recomeçar do zero? Isso vai apagar sua conversa atual.')) return;
+  session = { name: '', topic: '', level: '', messages: [], startTime: null };
+  selectedTopic = '';
+  selectedLevel = '';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('topicInput').value = '';
+  document.getElementById('chatMessages').innerHTML = '';
+  goHome();
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+// Update session time every minute
+setInterval(() => {
+  if (session.startTime) {
+    const min = Math.floor((Date.now() - session.startTime) / 60000);
+    document.getElementById('sessionTime').textContent = min + 'min';
+  }
+}, 30000);
+
+// ===================== INIT =====================
+document.addEventListener('DOMContentLoaded', () => {
+  const savedLang = localStorage.getItem('learnflow-lang') || (navigator.language || 'pt-BR');
+  const supported = Object.keys(I18N);
+  const matched = supported.find(l => savedLang.startsWith(l.split('-')[0])) || 'pt-BR';
+  document.getElementById('langSelect').value = matched;
+  applyLang(matched);
+
+  document.getElementById('langSelect').addEventListener('change', (e) => {
+    localStorage.setItem('learnflow-lang', e.target.value);
+    applyLang(e.target.value);
+  });
+});
+</script>
+
+</body>
+</html>
