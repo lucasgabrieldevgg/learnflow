@@ -1667,11 +1667,11 @@ let selectedInterests = [];
 let isThinking = false;
 
 // ===================== AI CALL =====================
-// Cadeia de IA com fallback automático:
-//   1. Pollinations (anônima, gratuita — pode ficar instável)
-//   2. /api/tutor neste mesmo domínio (proxy Vercel com OpenRouter, key no servidor)
+// Fallback de IA (em ordem de preferência):
+//   1. /api/tutor neste mesmo domínio (proxy Vercel com OpenRouter, key no servidor — estável)
+//   2. Pollinations (anônima, gratuita — pode ficar instável/sem crédito)
 //   3. Proxy remoto (AI_REMOTE_PROXY — permite o fallback funcionar até no GitHub Pages)
-const AI_ENDPOINTS = ['https://text.pollinations.ai/openai', 'api/tutor'];
+const AI_ENDPOINTS = ['api/tutor', 'https://text.pollinations.ai/openai'];
 let AI_REMOTE_PROXY = 'https://learnflow-ia.vercel.app/api/tutor';
 let aiWorkingUrl = null;
 
@@ -1734,6 +1734,11 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const fullText = await consumeSSE(res, onChunk);
       if (!fullText.trim()) throw new Error('resposta vazia');
+      // Provedores às vezes devolvem erro de cota como se fosse resposta (HTTP 200).
+      // Detecta o padrão e trata como falha para tentar o próximo endpoint.
+      if (/edit-key|reached its (budget|limit)|API key used for this request|insufficient_quota|quota (exceeded|exhausted)|rate limit exceeded/i.test(fullText)) {
+        throw new Error('provedor sem crédito/limite — resposta de erro disfarçada');
+      }
       aiWorkingUrl = url;
       return fullText;
     } catch (err) {
