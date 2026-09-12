@@ -2,7 +2,7 @@
 
 **Uma tutora de IA que ensina de verdade — muda a representação quando você não entende, em vez de repetir a mesma explicação.**
 
-> 🔗 **Use agora:** [learnflow-lukepalys-projects.vercel.app](https://learnflow-lukepalys-projects.vercel.app) · [GitHub Pages](https://lukepalys.github.io/learnflow/)
+> 🔗 **Use agora:** [learnflow-lukepalys-projects.vercel.app](https://learnflow-lukepalys-projects.vercel.app)
 
 ## 💡 O método
 
@@ -10,8 +10,8 @@ A maioria das IAs educacionais otimiza para *"o usuário quer a resposta → dê
 
 **Princípio central:** se o aluno não entendeu, mude a REPRESENTAÇÃO — nunca repita a mesma explicação.
 
-1. **Perfil de interesses** — no onboarding, a tutora aprende com o que VOCÊ aprende melhor (jogos, tech, séries, esportes...) e usa esses universos em todas as analogias
-2. **Ponte concreta** — o conceito aparece primeiro dentro do seu universo; o formalismo vem depois
+1. **Perfil de interesses** — no onboarding, a tutora aprende com o que VOCÊ gosta de mexer (jogos, tech, séries, esportes, cozinha, arte, animais, montar e consertar, carros...) e usa esses universos em todas as analogias
+2. **Ponte concreta** — o conceito aparece primeiro dentro do seu universo, com um exemplo SIMPLES de algo que você já conhece ou mexe no dia a dia (celular, jogo, bola, lanche, ônibus); o formalismo vem depois
 3. **Escada de pré-requisitos** — se você travar, ela desce etapa por etapa até achar a base que falta, ensina do zero e sobe de volta
 4. **Método socrático** — a resposta nunca vem de primeira; dicas guiadas até você chegar lá
 5. **Papel e caneta** — "pega algo pra escrever": anote, resolva no papel, depois confirme
@@ -34,7 +34,7 @@ A maioria das IAs educacionais otimiza para *"o usuário quer a resposta → dê
   1. [Pollinations AI](https://pollinations.ai) (anônima e gratuita)
   2. `/api/tutor` — proxy Vercel Serverless com [OpenRouter](https://openrouter.ai) (modelos gratuitos, key só no servidor)
   3. Proxy remoto — faz o fallback funcionar até no GitHub Pages
-- **Deploy:** GitHub Pages (push em `main`) + Vercel
+- **Deploy:** Vercel — [learnflow-lukepalys-projects.vercel.app](https://learnflow-lukepalys-projects.vercel.app) (estático + `api/tutor` Serverless)
 
 ## 🚀 Rodando localmente
 

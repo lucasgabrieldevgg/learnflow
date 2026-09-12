@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
-          'HTTP-Referer': 'https://lukepalys.github.io/learnflow/',
+          'HTTP-Referer': 'https://learnflow-lukepalys-projects.vercel.app/',
           'X-Title': 'LearnFlow',
         },
         body: JSON.stringify({
