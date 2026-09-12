@@ -2,7 +2,7 @@
 
 **Uma tutora de IA que ensina de verdade — muda a representação quando você não entende, em vez de repetir a mesma explicação.**
 
-> 🔗 **Use agora:** [learnflow-lukepalys-projects.vercel.app](https://learnflow-lukepalys-projects.vercel.app)
+> 🔗 **Use agora:** [learnflow-ia.vercel.app](https://learnflow-ia.vercel.app)
 
 ## 💡 O método
 
@@ -34,7 +34,7 @@ A maioria das IAs educacionais otimiza para *"o usuário quer a resposta → dê
   1. [Pollinations AI](https://pollinations.ai) (anônima e gratuita)
   2. `/api/tutor` — proxy Vercel Serverless com [OpenRouter](https://openrouter.ai) (modelos gratuitos, key só no servidor)
   3. Proxy remoto — faz o fallback funcionar até no GitHub Pages
-- **Deploy:** Vercel — [learnflow-lukepalys-projects.vercel.app](https://learnflow-lukepalys-projects.vercel.app) (estático + `api/tutor` Serverless)
+- **Deploy:** Vercel — [learnflow-ia.vercel.app](https://learnflow-ia.vercel.app) (estático + `api/tutor` Serverless)
 
 ## 🚀 Rodando localmente
 
