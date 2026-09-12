@@ -746,6 +746,7 @@
     margin: 8px 0;
   }
   .mission-card.mission-done { opacity: 0.75; border-color: var(--border); background: var(--bg-2); }
+  .mc-where { font-size: 11px; font-weight: 700; color: var(--accent); opacity: 0.9; margin: 2px 0 6px; letter-spacing: 0.2px; }
   .mc-head { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
   .mc-title { font-weight: 700; font-size: 14px; }
   .mc-task { font-size: 13px; line-height: 1.55; }
@@ -1176,6 +1177,9 @@ const I18N = {
     'mission-done-toast': 'Missão concluída! 🎉',
     'mission-creating': 'Criando missão…',
     'mission-verify-msg': '✅ Concluí a missão "{{title}}"! Confere pra mim se acertei?',
+    'mission-where-site': '📍 Aqui no site',
+    'mission-where-world': '🌍 No mundo real',
+    'mission-answer-btn': '✏️ Responder aqui',
     'fab-title': 'Falar com a tutora',
     'fab-send': 'Enviar',
     'fab-hint': 'Aperte 🎤 e fale — ou digite',
@@ -1279,6 +1283,9 @@ const I18N = {
     'mission-done-toast': 'Mission complete! 🎉',
     'mission-creating': 'Creating mission…',
     'mission-verify-msg': '✅ I finished the mission "{{title}}"! Can you check if I got it right?',
+    'mission-where-site': '📍 Right here, on the site',
+    'mission-where-world': '🌍 In the real world',
+    'mission-answer-btn': '✏️ Answer here',
     'fab-title': 'Talk to the tutor',
     'fab-send': 'Send',
     'fab-hint': 'Tap 🎤 and speak — or type below',
@@ -1382,6 +1389,9 @@ const I18N = {
     'mission-done-toast': '¡Misión completada! 🎉',
     'mission-creating': 'Creando misión…',
     'mission-verify-msg': '✅ ¡Completé la misión "{{title}}"! ¿Me confirmas si lo hice bien?',
+    'mission-where-site': '📍 Aquí en el sitio',
+    'mission-where-world': '🌍 En el mundo real',
+    'mission-answer-btn': '✏️ Responder aquí',
     'fab-title': 'Hablar con la tutora',
     'fab-send': 'Enviar',
     'fab-hint': 'Toca 🎤 y habla — o escribe abajo',
@@ -1485,6 +1495,9 @@ const I18N = {
     'mission-done-toast': 'Mission terminée ! 🎉',
     'mission-creating': 'Création de la mission…',
     'mission-verify-msg': '✅ J\'ai terminé la mission "{{title}}" ! Tu peux vérifier si c\'est juste ?',
+    'mission-where-site': '📍 Ici, sur le site',
+    'mission-where-world': '🌍 Dans le monde réel',
+    'mission-answer-btn': '✏️ Répondre ici',
     'fab-title': 'Parler au tuteur',
     'fab-send': 'Envoyer',
     'fab-hint': 'Appuie sur 🎤 et parle — ou écris ci-dessous',
@@ -1588,6 +1601,9 @@ const I18N = {
     'mission-done-toast': 'Mission abgeschlossen! 🎉',
     'mission-creating': 'Mission wird erstellt…',
     'mission-verify-msg': '✅ Ich habe die Mission "{{title}}" erledigt! Prüfst du, ob ich es richtig gemacht habe?',
+    'mission-where-site': '📍 Hier auf der Seite',
+    'mission-where-world': '🌍 In der echten Welt',
+    'mission-answer-btn': '✏️ Hier antworten',
     'fab-title': 'Mit dem Tutor sprechen',
     'fab-send': 'Senden',
     'fab-hint': 'Tippe auf 🎤 und sprich — oder tippe unten',
@@ -1691,6 +1707,9 @@ const I18N = {
     'mission-done-toast': 'Missione completata! 🎉',
     'mission-creating': 'Creazione missione…',
     'mission-verify-msg': '✅ Ho completato la missione "{{title}}"! Mi controlli se ho fatto giusto?',
+    'mission-where-site': '📍 Qui, sul sito',
+    'mission-where-world': '🌍 Nel mondo reale',
+    'mission-answer-btn': '✏️ Rispondi qui',
     'fab-title': 'Parla con il tutor',
     'fab-send': 'Invia',
     'fab-hint': 'Tocca 🎤 e parla — o scrivi qui sotto',
@@ -1794,6 +1813,9 @@ const I18N = {
     'mission-done-toast': 'ミッション達成！ 🎉',
     'mission-creating': 'ミッション作成中…',
     'mission-verify-msg': '✅「{{title}}」のミッションを完了しました！合ってるか確認してもらえますか？',
+    'mission-where-site': '📍 サイト内で',
+    'mission-where-world': '🌍 現実世界で',
+    'mission-answer-btn': '✏️ ここで答える',
     'fab-title': '先生と話す',
     'fab-send': '送信',
     'fab-hint': '🎤を押して話そう — 下に入力してもOK',
@@ -1897,6 +1919,9 @@ const I18N = {
     'mission-done-toast': '任务完成！ 🎉',
     'mission-creating': '正在创建任务…',
     'mission-verify-msg': '✅ 我完成了任务"{{title}}"！能帮我检查一下吗？',
+    'mission-where-site': '📍 在网站内',
+    'mission-where-world': '🌍 在现实世界中',
+    'mission-answer-btn': '✏️ 在这里回答',
     'fab-title': '和老师对话',
     'fab-send': '发送',
     'fab-hint': '点 🎤 说话 — 或在下面输入',
@@ -2206,29 +2231,41 @@ Real learning involves writing. In practical steps:
 
   const missionsSection = isPortuguese ? `## MISSÕES PRÁTICAS (só no modo aprendizagem)
 Quando o aluno terminar de entender um conceito (etapas 3-5 do fluxo) ou pedir, proponha UMA missão prática personalizada:
-- Feita na VIDA REAL ou no papel (5-15 min), fora do chat — sempre dentro do universo do aluno
-- Curta, concreta e possível de conferir
+- Curta (5-15 min), concreta e possível de conferir — sempre dentro do universo do aluno
+- A missão pode acontecer em DOIS LUGARES — escolha e marque no campo "onde":
+  • onde: site → ele resolve AQUI NO CHAT (um problema pra resolver, um desafio, um exercício que você montou); quando ele responder, você confere na hora
+  • onde: mundo → ele faz FORA DO SITE, na vida real ou no papel (observar, calcular, medir, criar, perguntar a alguém) e depois conta o resultado pra você
+- Como escolher: se o conteúdo dá pra praticar direto numa conversa, use site; se precisa de objetos, pessoas, lugares ou anotações do dia a dia, use mundo. Alterne — não seja sempre o mesmo tipo.
 - Formato OBRIGATÓRIO (exatamente assim, sem markdown dentro do bloco):
 :::missao
 titulo: <nome curto e divertido>
+onde: site
 tarefa: <o que ele deve fazer, em 1-3 passos>
 verificar: <resultado esperado, pra você conferir depois — sem entregar a resposta>
 :::
+- No campo "onde" escreva só "site" ou "mundo".
 - Depois do bloco, escreva UMA frase curta incentivando.
 - Só UMA missão por vez; se ele pedir outra, crie uma variação diferente.
-- Quando ele disser que concluiu, verifique socraticamente: pergunte o resultado dele, confirme ou peça revisão — só então celebre.` : `## PRACTICAL MISSIONS (learning mode only)
+- Missão site: quando ele mandar a resposta no chat, confira com rigor contra "verificar" — se estiver errado, NÃO entregue a resposta; dê uma dica e peça de novo.
+- Missão mundo: quando ele contar o resultado, verifique socraticamente (pergunte como chegou lá), confirme ou peça revisão — só então celebre.` : `## PRACTICAL MISSIONS (learning mode only)
 When the student finishes understanding a concept (steps 3-5 of the flow) or asks, propose ONE personalized practical mission:
-- Done in REAL LIFE or on paper (5-15 min), outside the chat — always inside the student's universe
-- Short, concrete and verifiable
+- Short (5-15 min), concrete and verifiable — always inside the student's universe
+- A mission can happen in TWO PLACES — choose and mark it in the "onde" field:
+  • onde: site → they solve it RIGHT HERE IN THE CHAT (a problem to solve, a challenge, an exercise you set up); when they answer, you check it right away
+  • onde: mundo → they do it OUTSIDE THE SITE, in real life or on paper (observe, calculate, measure, create, ask someone) and then report the result back to you
+- How to choose: if the content can be practiced directly in a conversation, use site; if it needs objects, people, places or everyday notes, use mundo. Alternate — don't always pick the same type.
 - MANDATORY format (exactly like this, no markdown inside the block):
 :::missao
 titulo: <short fun name>
+onde: site
 tarefa: <what they should do, in 1-3 steps>
 verificar: <expected result for you to check later — without giving the answer away>
 :::
+- In the "onde" field write only "site" or "mundo".
 - After the block, write ONE short encouraging sentence.
 - Only ONE mission at a time; if they ask for another, create a different variation.
-- When they say they finished, verify socratically: ask for their result, confirm or request revision — only then celebrate.`;
+- site mission: when they send the answer in the chat, grade it rigorously against "verificar" — if wrong, do NOT give the answer away; give a hint and ask again.
+- mundo mission: when they report the result, verify socratically (ask how they got there), confirm or request revision — only then celebrate.`;
 
   const never = isPortuguese ? `## O QUE NUNCA FAZER
 ❌ NUNCA use jargão técnico sem explicar em linguagem simples antes
@@ -2549,7 +2586,7 @@ async function sendMessage(text) {
 
   try {
     const aiMessages = [
-      { role: 'system', content: buildSystemPrompt() },
+      { role: 'system', content: buildSystemPrompt() + buildMissionsContext() },
       ...session.messages.map(m => ({
         role: m.role === 'user' ? 'user' : 'assistant',
         content: m.content,
@@ -2723,12 +2760,12 @@ function saveMissions(list) {
   try { localStorage.setItem('learnflow-missions', JSON.stringify(list.slice(-40))); } catch (e) {}
 }
 
-function addMission(title, task, check) {
+function addMission(title, task, check, where) {
   const list = loadMissions();
   const existing = list.find(m => m.title === title);
   if (existing) return existing.id;
   const id = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  list.push({ id, title, task, check: check || '', status: 'todo', createdAt: Date.now() });
+  list.push({ id, title, task, check: check || '', where: where === 'world' ? 'world' : 'site', status: 'todo', createdAt: Date.now() });
   saveMissions(list);
   updateMissionBadges();
   renderMissionsList();
@@ -2745,23 +2782,28 @@ function parseMissionBody(body) {
     const m = body.match(new RegExp('(?:' + name + ')\\s*:\\s*([^\\n]+(?:\\n(?!\\w+:)[^\\n]+)*)', 'i'));
     return m ? m[1].trim() : '';
   };
+  const rawWhere = (get('onde|where') || '').toLowerCase();
   return {
     title: get('t[ií]tulo|titulo'),
     task: get('tarefa'),
     check: get('verificar|criterio'),
+    where: /mundo|world|real|fora|vida/.test(rawWhere) ? 'world' : 'site',
   };
 }
 
 function missionCardHtml(m) {
   if (!m || !m.title || !m.task) return '';
-  const id = addMission(m.title, m.task, m.check);
+  const isWorld = m.where === 'world';
+  const id = addMission(m.title, m.task, m.check, m.where);
   const done = isMissionDone(id);
   return '<div class="mission-card' + (done ? ' mission-done' : '') + '" data-id="' + id + '">' +
     '<div class="mc-head"><span>🎯</span><span class="mc-title">' + escapeHtml(m.title) + '</span></div>' +
+    '<div class="mc-where">' + escapeHtml(isWorld ? t('mission-where-world') : t('mission-where-site')) + '</div>' +
     '<div class="mc-task">' + escapeHtml(m.task) + '</div>' +
     (done
       ? '<div class="mc-done">✅ ' + escapeHtml(t('mission-done-label')) + '</div>'
       : '<div class="mc-actions">' +
+        (isWorld ? '' : '<button class="mc-btn mc-answer-btn" onclick="answerMission()">' + escapeHtml(t('mission-answer-btn')) + '</button>') +
         '<button class="mc-btn mc-done-btn" onclick="missionDone(\'' + id + '\')">' + escapeHtml(t('mission-done-btn')) + '</button>' +
         '<button class="mc-btn" onclick="missionNew()">' + escapeHtml(t('mission-new-btn')) + '</button>' +
         '</div>') +
@@ -2817,6 +2859,26 @@ function missionDoneSilent(id) {
 
 function missionNew() { sendMessage(t('mission-new-msg')); }
 
+function answerMission() {
+  document.getElementById('fabPop').classList.remove('show');
+  document.getElementById('missionsDrawer').classList.remove('show');
+  stopVoice();
+  const inp = document.getElementById('chatInput');
+  if (inp) inp.focus();
+}
+
+// Contexto de missões pendentes — anexado ao system prompt pra tutora conferir respostas
+function buildMissionsContext() {
+  if (session.mode === 'exam') return '';
+  const pend = loadMissions().filter(m => m.status !== 'done').slice(-3);
+  if (!pend.length) return '';
+  const isPortuguese = (document.documentElement.lang || 'pt-BR') === 'pt-BR';
+  const head = isPortuguese
+    ? '\n\n## MISSÕES EM ANDAMENTO (contexto automático — não anuncie esta seção)\nO aluno tem missões pendentes. Se a mensagem dele parecer resposta ou relato de uma delas, verifique contra o campo "verificar" SEM entregar a resposta. Missão [site]: corrija com rigor; se errar, dê uma dica e peça de novo. Missão [mundo]: pergunte COMO ele chegou ao resultado antes de confirmar. Quando acertar, celebre e lembre de marcá-la como concluída.'
+    : '\n\n## ONGOING MISSIONS (automatic context — do not announce this section)\nThe student has pending missions. If their message looks like an answer or report for one of them, verify against the "verificar" field WITHOUT giving the answer away. [site] mission: grade rigorously; if wrong, give a hint and ask again. [mundo] mission: ask HOW they got the result before confirming. When correct, celebrate and remind them to mark it done.';
+  return head + '\n' + pend.map(m => '- [' + (m.where === 'world' ? 'mundo' : 'site') + '] ' + m.title + ' — ' + m.task + (m.check ? ' | verificar: ' + m.check : '')).join('\n');
+}
+
 function updateMissionBadges() {
   const pending = loadMissions().filter(m => m.status !== 'done').length;
   const badge = document.getElementById('fabBadge');
@@ -2836,7 +2898,7 @@ function renderMissionsList() {
   const pending = list.filter(m => m.status !== 'done');
   const done = list.filter(m => m.status === 'done').reverse();
   const item = (mm) => '<div class="mission-item' + (mm.status === 'done' ? ' mi-done' : '') + '">' +
-    '<div class="mi-head"><span class="mi-title">' + (mm.status === 'done' ? '✅ ' : '🎯 ') + escapeHtml(mm.title) + '</span>' +
+    '<div class="mi-head"><span class="mi-title">' + (mm.status === 'done' ? '✅ ' : (mm.where === 'world' ? '🌍 ' : '📍 ')) + escapeHtml(mm.title) + '</span>' +
     (mm.status !== 'done' ? '<button class="mi-btn" onclick="missionDoneSilent(\'' + mm.id + '\')" title="' + escapeHtml(t('mission-done-label')) + '">✅</button>' : '') +
     '</div><div class="mi-task">' + escapeHtml(mm.task) + '</div></div>';
   box.innerHTML = pending.map(item).join('') + done.map(item).join('');
