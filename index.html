@@ -966,7 +966,7 @@ const I18N = {
     'chat-ph': 'Pergunte qualquer coisa...',
     'footer-made': 'Feito com',
     'footer-by': 'por',
-    'footer-tech': 'Pollinations AI · 100% no navegador',
+    'footer-tech': 'IA gratuita com fallback · 100% no navegador',
     greeting: 'Oi {name}! 👋 Eu sou sua tutora de IA. Vamos aprender sobre **{topic}** juntos. Como você quer começar? Posso te explicar um conceito, fazer um quiz, criar flashcards ou qualquer outra coisa — é só pedir!',
     'need-name': 'Digite seu nome primeiro 🙂',
     'need-topic': 'Escolha um tema ou digite um 🙂',
@@ -1048,7 +1048,7 @@ const I18N = {
     'chat-ph': 'Ask anything...',
     'footer-made': 'Made with',
     'footer-by': 'by',
-    'footer-tech': 'Pollinations AI · 100% in browser',
+    'footer-tech': 'Free AI with fallback · 100% in browser',
     greeting: 'Hi {name}! 👋 I\'m your AI tutor. Let\'s learn about **{topic}** together. How do you want to start? I can explain a concept, give you a quiz, create flashcards or anything else — just ask!',
     'need-name': 'Please enter your name first 🙂',
     'need-topic': 'Pick a topic or type one 🙂',
@@ -1130,7 +1130,7 @@ const I18N = {
     'chat-ph': 'Pregunta cualquier cosa...',
     'footer-made': 'Hecho con',
     'footer-by': 'por',
-    'footer-tech': 'Pollinations AI · 100% en el navegador',
+    'footer-tech': 'IA gratuita con respaldo · 100% en el navegador',
     greeting: '¡Hola {name}! 👋 Soy tu tutor de IA. Vamos a aprender sobre **{topic}** juntos. ¿Cómo quieres empezar? Puedo explicar un concepto, hacer un quiz, crear flashcards o lo que necesites — ¡solo pídelo!',
     'need-name': 'Escribe tu nombre primero 🙂',
     'need-topic': 'Elige un tema o escribe uno 🙂',
@@ -1212,7 +1212,7 @@ const I18N = {
     'chat-ph': 'Posez n\'importe quelle question...',
     'footer-made': 'Fait avec',
     'footer-by': 'par',
-    'footer-tech': 'Pollinations AI · 100% navigateur',
+    'footer-tech': 'IA gratuite avec secours · 100% navigateur',
     greeting: 'Salut {name}! 👋 Je suis votre tuteur IA. Apprenons **{topic}** ensemble. Comment voulez-vous commencer? Je peux expliquer un concept, faire un quiz, créer des flashcards ou autre — demandez!',
     'need-name': 'Tapez votre nom d\'abord 🙂',
     'need-topic': 'Choisissez un sujet ou tapez-en un 🙂',
@@ -1294,7 +1294,7 @@ const I18N = {
     'chat-ph': 'Fragen Sie alles...',
     'footer-made': 'Gemacht mit',
     'footer-by': 'von',
-    'footer-tech': 'Pollinations AI · 100% im Browser',
+    'footer-tech': 'Kostenlose KI mit Fallback · 100% im Browser',
     greeting: 'Hi {name}! 👋 Ich bin Ihr KI-Tutor. Lassen Sie uns **{topic}** zusammen lernen. Wie wollen Sie beginnen? Ich kann ein Konzept erklären, ein Quiz machen, Flashcards erstellen oder anderes — fragen Sie!',
     'need-name': 'Bitte zuerst Namen eingeben 🙂',
     'need-topic': 'Thema wählen oder eingeben 🙂',
@@ -1376,7 +1376,7 @@ const I18N = {
     'chat-ph': 'Chiedi qualsiasi cosa...',
     'footer-made': 'Fatto con',
     'footer-by': 'da',
-    'footer-tech': 'Pollinations AI · 100% nel browser',
+    'footer-tech': 'IA gratuita con fallback · 100% nel browser',
     greeting: 'Ciao {name}! 👋 Sono il tuo tutor IA. Impariamo **{topic}** insieme. Come vuoi iniziare? Posso spiegare un concetto, fare un quiz, creare flashcards o altro — chiedi!',
     'need-name': 'Inserisci prima il nome 🙂',
     'need-topic': 'Scegli un argomento o digita 🙂',
@@ -1458,7 +1458,7 @@ const I18N = {
     'chat-ph': '何でも聞いてください...',
     'footer-made': '作成:',
     'footer-by': '',
-    'footer-tech': 'Pollinations AI · 100%ブラウザ内',
+    'footer-tech': '無料AI（フォールバック付き） · 100%ブラウザ内',
     greeting: 'やあ{name}! 👋 私はAIチューターです。一緒に**{topic}**を学びましょう。どう始めますか？概念の説明、クイズ、フラッシュカード作成など何でも — どうぞ！',
     'need-name': 'まず名前を入力してください 🙂',
     'need-topic': 'テーマを選ぶか入力してください 🙂',
@@ -1540,7 +1540,7 @@ const I18N = {
     'chat-ph': '问任何问题...',
     'footer-made': '用',
     'footer-by': '由',
-    'footer-tech': 'Pollinations AI · 100% 浏览器内',
+    'footer-tech': '免费 AI（自动切换备用） · 100% 浏览器内',
     greeting: '嗨 {name}! 👋 我是您的 AI 导师。让我们一起学习 **{topic}**。您想如何开始？我可以解释概念、做测验、创建闪卡等 — 尽管问！',
     'need-name': '请先输入您的名字 🙂',
     'need-topic': '请选择或输入主题 🙂',
@@ -1619,40 +1619,24 @@ let selectedInterests = [];
 let isThinking = false;
 
 // ===================== AI CALL =====================
-async function callAI(messages, maxTokens = 1500) {
-  const res = await fetch('https://text.pollinations.ai/openai', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'openai-fast',
-      messages,
-      temperature: 0.7,
-      max_tokens: maxTokens,
-      reasoning: { effort: 'none' },
-      stream: false,
-    }),
-  });
-  if (!res.ok) throw new Error('Pollinations: ' + res.status);
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+// Cadeia de IA com fallback automático:
+//   1. Pollinations (anônima, gratuita — pode ficar instável)
+//   2. /api/tutor neste mesmo domínio (proxy Vercel com OpenRouter, key no servidor)
+//   3. Proxy remoto (AI_REMOTE_PROXY — permite o fallback funcionar até no GitHub Pages)
+const AI_ENDPOINTS = ['https://text.pollinations.ai/openai', 'api/tutor'];
+let AI_REMOTE_PROXY = 'https://learnflow-lukepalys-projects.vercel.app/api/tutor';
+let aiWorkingUrl = null;
+
+function aiUrlList() {
+  const list = AI_REMOTE_PROXY ? [...AI_ENDPOINTS, AI_REMOTE_PROXY] : [...AI_ENDPOINTS];
+  if (aiWorkingUrl && list.includes(aiWorkingUrl)) {
+    return [aiWorkingUrl, ...list.filter(u => u !== aiWorkingUrl)];
+  }
+  return list;
 }
 
-// Streaming version — word-by-word response
-async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
-  const res = await fetch('https://text.pollinations.ai/openai', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'openai-fast',
-      messages,
-      temperature: 0.7,
-      max_tokens: maxTokens,
-      reasoning: { effort: 'none' },
-      stream: true,
-    }),
-  });
-  if (!res.ok) throw new Error('Pollinations: ' + res.status);
-
+// Lê uma resposta SSE no formato OpenAI e acumula o texto
+async function consumeSSE(res, onChunk) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -1680,6 +1664,36 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
     }
   }
   return fullText;
+}
+
+// Streaming version — word-by-word response, com fallback de endpoint
+async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
+  let lastErr = null;
+  for (const url of aiUrlList()) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'openai-fast',
+          messages,
+          temperature: 0.7,
+          max_tokens: maxTokens,
+          reasoning: { effort: 'none' },
+          stream: true,
+        }),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const fullText = await consumeSSE(res, onChunk);
+      if (!fullText.trim()) throw new Error('resposta vazia');
+      aiWorkingUrl = url;
+      return fullText;
+    } catch (err) {
+      lastErr = err;
+      console.warn('LearnFlow: endpoint de IA indisponível (' + url + ') —', err.message);
+    }
+  }
+  throw lastErr || new Error('Nenhuma IA disponível');
 }
 
 function buildSystemPrompt() {
