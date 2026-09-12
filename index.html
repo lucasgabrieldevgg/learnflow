@@ -805,6 +805,22 @@
             <span class="topic-card-icon">🍳</span>
             <span data-i18n="interest-cooking">Cozinha</span>
           </div>
+          <div class="topic-card" onclick="toggleInterest('art', this)">
+            <span class="topic-card-icon">🎨</span>
+            <span data-i18n="interest-art">Desenho e arte</span>
+          </div>
+          <div class="topic-card" onclick="toggleInterest('animals', this)">
+            <span class="topic-card-icon">🐶</span>
+            <span data-i18n="interest-animals">Animais</span>
+          </div>
+          <div class="topic-card" onclick="toggleInterest('diy', this)">
+            <span class="topic-card-icon">🔧</span>
+            <span data-i18n="interest-diy">Montar e consertar</span>
+          </div>
+          <div class="topic-card" onclick="toggleInterest('cars', this)">
+            <span class="topic-card-icon">🚗</span>
+            <span data-i18n="interest-cars">Carros</span>
+          </div>
         </div>
         <div class="input-group">
           <label data-i18n="step3i-other">Ou digite outros universos...</label>
@@ -910,7 +926,7 @@
   </div>
 
   <footer>
-    <span data-i18n="footer-made">Feito com</span> 💜 <span data-i18n="footer-by">por</span> <a href="https://github.com/lukepalys" target="_blank" rel="noopener">LukePalys</a> • <span data-i18n="footer-tech">Pollinations AI · 100% no navegador</span>
+    <span data-i18n="footer-made">Feito com</span> 💜 <span data-i18n="footer-by">por</span> <a href="https://github.com/lucasgabrieldevgg" target="_blank" rel="noopener">lucasgabrieldevgg</a> • <span data-i18n="footer-tech">Pollinations AI · 100% no navegador</span>
   </footer>
 </div>
 
@@ -985,6 +1001,10 @@ const I18N = {
     'interest-music': 'Música',
     'interest-social': 'Redes sociais',
     'interest-cooking': 'Cozinha',
+    'interest-art': 'Desenho e arte',
+    'interest-animals': 'Animais',
+    'interest-diy': 'Montar e consertar',
+    'interest-cars': 'Carros',
     'theme-title': 'Alternar tema',
     'mode-learn': '🎓 Modo Aprender',
     'mode-exam': '📝 Modo Prova',
@@ -1067,6 +1087,10 @@ const I18N = {
     'interest-music': 'Music',
     'interest-social': 'Social media',
     'interest-cooking': 'Cooking',
+    'interest-art': 'Art & drawing',
+    'interest-animals': 'Animals',
+    'interest-diy': 'Building & fixing',
+    'interest-cars': 'Cars',
     'theme-title': 'Toggle theme',
     'mode-learn': '🎓 Learn mode',
     'mode-exam': '📝 Exam mode',
@@ -1149,6 +1173,10 @@ const I18N = {
     'interest-music': 'Música',
     'interest-social': 'Redes sociales',
     'interest-cooking': 'Cocina',
+    'interest-art': 'Arte y dibujo',
+    'interest-animals': 'Animales',
+    'interest-diy': 'Armar y arreglar',
+    'interest-cars': 'Carros',
     'theme-title': 'Cambiar tema',
     'mode-learn': '🎓 Modo Aprender',
     'mode-exam': '📝 Modo Examen',
@@ -1231,6 +1259,10 @@ const I18N = {
     'interest-music': 'Musique',
     'interest-social': 'Réseaux sociaux',
     'interest-cooking': 'Cuisine',
+    'interest-art': 'Dessin & art',
+    'interest-animals': 'Animaux',
+    'interest-diy': 'Bricoler',
+    'interest-cars': 'Voitures',
     'theme-title': 'Changer de thème',
     'mode-learn': '🎓 Mode Apprendre',
     'mode-exam': '📝 Mode Examen',
@@ -1313,6 +1345,10 @@ const I18N = {
     'interest-music': 'Musik',
     'interest-social': 'Soziale Medien',
     'interest-cooking': 'Kochen',
+    'interest-art': 'Zeichnen & Kunst',
+    'interest-animals': 'Tiere',
+    'interest-diy': 'Basteln & Reparieren',
+    'interest-cars': 'Autos',
     'theme-title': 'Design wechseln',
     'mode-learn': '🎓 Lernmodus',
     'mode-exam': '📝 Prüfungsmodus',
@@ -1395,6 +1431,10 @@ const I18N = {
     'interest-music': 'Musica',
     'interest-social': 'Social network',
     'interest-cooking': 'Cucina',
+    'interest-art': 'Arte e disegno',
+    'interest-animals': 'Animali',
+    'interest-diy': 'Costruire e riparare',
+    'interest-cars': 'Auto',
     'theme-title': 'Cambia tema',
     'mode-learn': '🎓 Modalità Impara',
     'mode-exam': '📝 Modalità Esame',
@@ -1477,6 +1517,10 @@ const I18N = {
     'interest-music': '音楽',
     'interest-social': 'SNS',
     'interest-cooking': '料理',
+    'interest-art': '絵とアート',
+    'interest-animals': '動物',
+    'interest-diy': '工作と修理',
+    'interest-cars': '車',
     'theme-title': 'テーマ切替',
     'mode-learn': '🎓 学習モード',
     'mode-exam': '📝 テストモード',
@@ -1559,6 +1603,10 @@ const I18N = {
     'interest-music': '音乐',
     'interest-social': '社交媒体',
     'interest-cooking': '烹饪',
+    'interest-art': '绘画与艺术',
+    'interest-animals': '动物',
+    'interest-diy': '动手组装',
+    'interest-cars': '汽车',
     'theme-title': '切换主题',
     'mode-learn': '🎓 学习模式',
     'mode-exam': '📝 考试模式',
@@ -1603,7 +1651,7 @@ function applyLang(lang) {
 }
 
 // ===================== STATE =====================
-const INTEREST_KEYS = ['games', 'tech', 'youtube', 'series', 'sports', 'music', 'social', 'cooking'];
+const INTEREST_KEYS = ['games', 'tech', 'youtube', 'series', 'sports', 'music', 'social', 'cooking', 'art', 'animals', 'diy', 'cars'];
 let session = {
   name: '',
   topic: '',
@@ -1715,14 +1763,20 @@ function buildSystemPrompt() {
 - Universos que o aluno domina e curte: ${interestsList || 'não informado — use situações universais do dia a dia (cozinhar, mercado, videogame, série, ônibus)'}
 
 ### Regra dos universos
-Use esses universos em TODAS as analogias, exemplos e visualizações. Se o aluno curte jogos, a conta acontece com moedas e fases; se curte futebol, com jogadas e placares. O conteúdo é sempre o mesmo — só a embalagem muda.` : `## STUDENT PROFILE
+Use esses universos em TODAS as analogias, exemplos e visualizações. Se o aluno curte jogos, a conta acontece com moedas e fases; se curte futebol, com jogadas e placares. O conteúdo é sempre o mesmo — só a embalagem muda.
+
+### Regra do exemplo simples
+Todo exemplo vem do mundo real do aluno: algo SIMPLES que ele já conhece ou gosta de mexer — celular, jogo, bola, lanche, ônibus, música, troco de compra. Nada de exemplo formal, distante ou "de livro didático": quando a embalagem é familiar, o cérebro gasta toda a energia em entender o conceito, não o cenário. Na dúvida, escolha o objeto mais cotidiano possível.` : `## STUDENT PROFILE
 - Name: ${session.name}
 - Wants to learn about: ${session.topic}
 - Stated level: ${levelName}
 - Universes the student knows and likes: ${interestsList || 'not informed — use universal everyday situations (cooking, shopping, video games, series, bus ride)'}
 
 ### Universe rule
-Use these universes in ALL analogies, examples and visualizations. If the student likes games, the math happens with coins and levels; if they like soccer, with plays and scoreboards. The content is always the same — only the wrapping changes.`;
+Use these universes in ALL analogies, examples and visualizations. If the student likes games, the math happens with coins and levels; if they like soccer, with plays and scoreboards. The content is always the same — only the wrapping changes.
+
+### Simple-example rule
+Every example comes from the student's real world: something SIMPLE they already know or like to tinker with — phone, game, ball, snack, bus ride, music, shopping change. No formal, distant or "textbook" examples: when the wrapping is familiar, the brain spends all its energy on the concept, not the scenario. When in doubt, pick the most everyday object possible.`;
 
   const mission = isPortuguese
     ? `## SUA MISSÃO
@@ -1744,7 +1798,7 @@ Se ainda não der, desça a escada de pré-requisitos (passo 4 do fluxo abaixo).
 ### 1. Diagnóstico
 Nunca jogue conteúdo. Comece perguntando o que o aluno já sabe sobre o assunto — e deixe claro que pode falar errado, sem problema.
 ### 2. Ponte concreta
-Explique o conceito DENTRO do universo do aluno primeiro. O formalismo vem DEPOIS, nunca antes.
+Explique o conceito DENTRO do universo do aluno primeiro, com um exemplo simples de algo que ele conhece ou gosta de mexer. O formalismo vem DEPOIS, nunca antes.
 ### 3. Verificação
 Pergunte: "me explica com suas palavras?" ou faça uma mini-pergunta. Recall ativo vale mais que "ficou claro?" — todo mundo diz que sim.
 ### 4. Escada de pré-requisitos
@@ -1766,7 +1820,7 @@ If it still doesn't work, go down the prerequisite ladder (step 4 of the flow be
 ### 1. Diagnosis
 Never dump content. Start by asking what the student already knows about the subject — and make it clear that being wrong is fine.
 ### 2. Concrete bridge
-Explain the concept INSIDE the student's universe first. Formalism comes AFTER, never before.
+Explain the concept INSIDE the student's universe first, with a simple example of something they know or like to tinker with. Formalism comes AFTER, never before.
 ### 3. Verification
 Ask: "explain it in your own words?" or ask a mini-question. Active recall beats "is it clear?" — everyone says yes.
 ### 4. Prerequisite ladder
@@ -1785,7 +1839,7 @@ Once they master it in the concrete, show the SAME reasoning without the context
 
 ### OS 4 NÍVEIS DE AJUDA (responda no nível pedido)
 - 💡 DICA: uma pista pequena (1-2 frases) que aponte a direção sem resolver nada.
-- 🧩 EXEMPLO: um problema PARALELO resolvido passo a passo, dentro do universo do aluno — mesma estrutura lógica, outros objetos/números. No final, é o ALUNO quem resolve o original.
+- 🧩 EXEMPLO: um problema PARALELO resolvido passo a passo, dentro do universo do aluno, com objetos simples do dia a dia dele — mesma estrutura lógica, outros números. No final, é o ALUNO quem resolve o original.
 - 👁️ VISUALIZAR: represente o problema visualmente em texto — diagrama ASCII, tabela, setas, ou uma cena narrada passo a passo para imaginar.
 - 🧑‍🏫 ME ENSINE: desça a escada de pré-requisitos e ensine do zero a base que falta, com o método completo.
 
@@ -1802,7 +1856,7 @@ Aprender de verdade envolve escrever. Nas etapas práticas:
 
 ### THE 4 HELP LEVELS (answer at the requested level)
 - 💡 HINT: a small clue (1-2 sentences) pointing the direction without solving anything.
-- 🧩 EXAMPLE: a PARALLEL problem solved step by step, inside the student's universe — same logical structure, different objects/numbers. At the end, the STUDENT solves the original one.
+- 🧩 EXAMPLE: a PARALLEL problem solved step by step, inside the student's universe, with simple everyday objects — same logical structure, different numbers. At the end, the STUDENT solves the original one.
 - 👁️ VISUALIZE: represent the problem visually in text — ASCII diagram, table, arrows, or a narrated scene to imagine step by step.
 - 🧑‍🏫 TEACH ME: go down the prerequisite ladder and teach the missing base from zero, with the full method.
 
