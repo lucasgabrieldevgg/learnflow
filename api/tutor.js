@@ -13,6 +13,7 @@ const PROVIDERS = [
     base: 'https://openrouter.ai/api/v1',
     envKey: 'OPENROUTER_API_KEY',
     altEnvKey: 'AI_API_KEY',
+    useReasoningParam: true, // aceita reasoning:{effort:'none'} para não vazar o pensamento no content
     extraHeaders: () => ({
       'HTTP-Referer': 'https://learnflow-ia.vercel.app/',
       'X-Title': 'LearnFlow',
@@ -48,21 +49,32 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST.' });
 
-  const { messages, max_tokens = 1500, temperature = 0.7 } = req.body || {};
+  const { messages, max_tokens = 1500, temperature = 0.7, reasoning } = req.body || {};
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Envie { messages: [...] }.' });
   }
 
-  const body = JSON.stringify({
-    messages,
-    max_tokens: Math.min(Number(max_tokens) || 1500, 2000),
-    temperature: typeof temperature === 'number' ? temperature : 0.7,
-    stream: true,
-  });
+  const makeBody = (model, provider) => {
+    const b = {
+      model,
+      messages,
+      max_tokens: Math.min(Number(max_tokens) || 1500, 2000),
+      temperature: typeof temperature === 'number' ? temperature : 0.7,
+      stream: true,
+    };
+    if (provider.useReasoningParam) {
+      b.reasoning = reasoning && typeof reasoning === 'object' ? reasoning : { effort: 'none' };
+    }
+    return JSON.stringify(b);
+  };
 
+  const attempts = [];
   for (const provider of PROVIDERS) {
     const apiKey = process.env[provider.envKey] || process.env[provider.altEnvKey || ''];
-    if (!apiKey) continue; // provedor sem key configurada — pula
+    if (!apiKey) {
+      attempts.push({ provider: provider.name, skipped: 'env ausente' });
+      continue; // provedor sem key configurada — pula
+    }
 
     for (const model of provider.models) {
       try {
@@ -73,10 +85,20 @@ export default async function handler(req, res) {
             'Authorization': `Bearer ${apiKey}`,
             ...provider.extraHeaders(),
           },
-          body,
+          body: makeBody(model, provider),
         });
 
-        if (!r.ok || !r.body) continue; // tenta o próximo modelo
+        // Alguns provedores devolvem HTTP 200 com erro JSON no body (ex.: 429 do pool grátis)
+        const ctype = (r.headers.get('content-type') || '').toLowerCase();
+        if (ctype.includes('application/json')) {
+          attempts.push({ provider: provider.name, model, note: 'erro no body (HTTP 200)' });
+          continue;
+        }
+
+        if (!r.ok || !r.body) {
+          attempts.push({ provider: provider.name, model, status: r.status });
+          continue; // tenta o próximo modelo
+        }
 
         res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
         res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -97,5 +119,8 @@ export default async function handler(req, res) {
     }
   }
 
-  return res.status(502).json({ error: 'Nenhum modelo gratuito respondeu agora. Tente de novo em instantes.' });
+  return res.status(502).json({
+    error: 'Nenhum modelo gratuito respondeu agora. Tente de novo em instantes.',
+    attempts,
+  });
 }
