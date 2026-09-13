@@ -2216,6 +2216,23 @@ function lfValidateOutput(txt) {
   return null;
 }
 
+// Detector de recuperação: resposta de programação SEM bloco :::atividade —
+// o aluno vê código de exemplo, mas o terminal não abre. Os provedores free
+// têm aderência parcial à regra do terminal; 1 chamada extra resolve ~90%.
+function lfNeedsActivityRecovery(text) {
+  if (/:::atividade|:::missao/i.test(text)) return false;
+  if (session.mode === 'exam') return false;
+  const hasCodeBlock = /```/.test(text);
+  const hasCodeCalls = /console\.log\s*\(|\bprint\s*\(|\bdef\s+\w+\s*\(|\bfunction\s+\w+\s*\(|\bSystem\.out\.print/.test(text);
+  return hasCodeBlock || hasCodeCalls;
+}
+
+function lfActivityRecoveryNudge() {
+  return (document.documentElement.lang || 'pt-BR') === 'pt-BR'
+    ? 'Sua resposta anterior ficou SEM o bloco de atividade de código. Reemita a resposta agora — mesma qualidade, mesmo conteúdo, mas terminando com o bloco :::atividade tipo terminal no formato correto (titulo/enunciado/linguagem: javascript/codigo-inicial/esperado). Responda apenas com a resposta final, sem comentários.'
+    : 'Your previous reply was MISSING the code activity block. Re-issue the reply now — same quality, same content, but ending with the :::atividade terminal block in the correct format (titulo/enunciado/linguagem: javascript/codigo-inicial/esperado). Reply only with the final answer, no comments.';
+}
+
 // Streaming version — word-by-word response, com fallback de endpoint
 async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
   let lastErr = null;
@@ -2227,7 +2244,7 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
         body: JSON.stringify({
           model: 'openai-fast',
           messages,
-          temperature: 0.7,
+          temperature: 0.5,
           max_tokens: maxTokens,
           reasoning: { effort: 'none' },
           stream: true,
@@ -2242,6 +2259,35 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
       // Checagem final (cobre o caso de o stream terminar exatamente no limite)
       const bad = lfValidateOutput(fullText);
       if (bad) throw new Error(bad);
+      // Recuperação de atividade: resposta de programação sem bloco terminal —
+      // 1 chamada silenciosa extra; se falhar, mantém a resposta original.
+      if (lfNeedsActivityRecovery(fullText)) {
+        try {
+          const rec = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: 'openai-fast',
+              messages: messages.concat([
+                { role: 'assistant', content: fullText },
+                { role: 'user', content: lfActivityRecoveryNudge() },
+              ]),
+              temperature: 0.5,
+              max_tokens: Math.min(maxTokens, 1200),
+              reasoning: { effort: 'none' },
+              stream: true,
+            }),
+            signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(40000) : undefined,
+          });
+          if (rec.ok) {
+            const fixed = await consumeSSE(rec, () => {}, 20000, lfValidateOutput);
+            if (fixed.trim() && !lfValidateOutput(fixed) && /:::atividade/i.test(fixed)) {
+              aiWorkingUrl = url;
+              return fixed;
+            }
+          }
+        } catch (e) { console.warn('LearnFlow: recuperação de atividade falhou — mantendo resposta original.', e.message); }
+      }
       aiWorkingUrl = url;
       return fullText;
     } catch (err) {
@@ -2461,8 +2507,11 @@ verificar: <expected result for you to check later — without giving the answer
     ? `## ATIVIDADES INTERATIVAS (terminal de código e bloco de notas)
 O site tem ferramentas que você pode abrir na conversa do aluno: um TERMINAL onde ele escreve e EXECUTA código de verdade (JavaScript), e um BLOCO DE NOTAS onde ele escreve um texto e te manda.
 ### Quando usar
-- Programação, lógica, algoritmos, matemática de código: TURNO COMPLETO — explique o conceito em 1-2 frases e proponha a atividade DE TERMINAL NO MESMO turno. NUNCA termine o turno só com um bloco de código de exemplo: ver código não ensina, ESCREVER e RODAR ensina (como nas melhores plataformas de código do mundo).
-- O terminal executa JAVASCRIPT. Se o aluno estiver aprendendo outra linguagem (Python, C...), mostre a ideia na linguagem dele em 1 frase curta e proponha a MESMA ideia em JavaScript (ex.: Python usa print(...), JS usa console.log(...)).
+- Programação, lógica, algoritmos, matemática de código — FLUXO OBRIGATÓRIO do turno (vale MESMO quando o aluno só pede para ensinar, tipo "como imprimo texto?"):
+  1. UM conceito em 1-2 frases com analogia do universo do aluno
+  2. A sintaxe em UMA linha curta dentro da frase (ex.: "no Python é print(\"olá\")")
+  3. Termine SEMPRE emitindo o bloco :::atividade tipo terminal — o aluno aprende ESCREVENDO e RODANDO, nunca só lendo código
+- O terminal executa JAVASCRIPT. Aluno aprendendo Python/C? Mostre a ideia na linguagem dele em 1 frase e proponha a MESMA ideia em JS (Python usa print(...), JS usa console.log(...)).
 - Se o aluno pedir para praticar código ("me dá uma atividade com código", "quero executar algo"), entregue a atividade de terminal NO MESMO turno — nunca diga que precisa fazer outra coisa antes.
 - Redação, explicação com as próprias palavras, planejamento, resumo: proponha o BLOCO DE NOTAS.
 - No Modo Prova não proponha atividades. Prática com objetos físicos e mundo real continua sendo :::missao.
@@ -2490,8 +2539,11 @@ enunciado: <o que ele deve escrever no bloco>
     : `## INTERACTIVE ACTIVITIES (code terminal and notepad)
 The site has tools you can open in the student's conversation: a TERMINAL where they write and RUN real code (JavaScript), and a NOTEPAD where they write a text and send it to you.
 ### When to use
-- Programming, logic, algorithms, code math: FULL TURN — explain the concept in 1-2 sentences and propose a TERMINAL activity in the SAME turn. NEVER end the turn with just an example code block: reading code doesn't teach, WRITING and RUNNING does (like the best coding platforms in the world).
-- The terminal runs JAVASCRIPT. If the student is learning another language (Python, C...), show the idea in their language in 1 short sentence and propose the SAME idea in JavaScript (e.g., Python uses print(...), JS uses console.log(...)).
+- Programming, logic, algorithms, code math — MANDATORY turn flow (applies EVEN when the student only asks to be TAUGHT, like "how do I print text?"):
+  1. ONE concept in 1-2 sentences with an analogy from the student's universe
+  2. The syntax in ONE short line inside the sentence (e.g., "in Python it's print(\"hello\")")
+  3. ALWAYS end by emitting the :::atividade terminal block — students learn by WRITING and RUNNING, never just reading code
+- The terminal runs JAVASCRIPT. Student learning Python/C? Show the idea in their language in 1 sentence and propose the SAME idea in JS (Python uses print(...), JS uses console.log(...)).
 - If the student asks to practice code ("give me a coding activity", "I want to run something"), deliver the terminal activity in the SAME turn — never say you need to do something else first.
 - Essays, explaining in their own words, planning, summaries: propose the NOTEPAD.
 - In Exam Mode do not propose activities. Practice with physical objects and the real world stays as :::missao.
@@ -2589,6 +2641,7 @@ Sua resposta é a mensagem final que o aluno lê no chat. Você escreve APENAS e
 ❌ NUNCA comece a resposta narrando a situação ou pensando em voz alta ("O aluno pediu...", "Segundo as regras, preciso...", "Vou verificar se...") — vá DIRETO ao aluno, falando COM ele.
 ❌ NUNCA explique suas regras de decisão ao aluno (nada de "uma regra importante do LearnFlow", "missão digital só é liberada se...", "deixa eu verificar se pode"). Aplique as regras EM SILÊNCIO: decida você mesmo e entregue o resultado pronto. O aluno nunca vê os critérios — só a missão/exemplo/pergunta.
 ❌ Pediu missão, tarefa ou atividade? A resposta é SÓ: 1-2 frases + o bloco + 1 frase de incentivo. NUNCA dê uma lição antes, nunca adie, nunca peça confirmação — mesmo que ache que falta conceito: a missão é a ferramenta de ensino.
+❌ Assunto de PROGRAMAÇÃO/código sem bloco :::atividade na resposta = FALHA GRAVE: explique em 1-2 frases e TERMINE com a atividade de terminal. Código de exemplo em markdown sozinho nunca encerra o turno — e escrever "digite no terminal abaixo" sem emitir o bloco abre NADA pro aluno.
 ✅ SEMPRE fale na PRIMEIRA PESSOA com o aluno, direto ao ponto, como um professor de verdade conversando.`
     : `## HOW YOU WRITE — OUTPUT HYGIENE (the most important rule of all)
 Your response is the final message the student reads in the chat. You write ONLY that — nothing else exists.
@@ -2601,6 +2654,7 @@ Your response is the final message the student reads in the chat. You write ONLY
 ❌ NEVER start the reply narrating the situation or thinking out loud ("The student asked...", "According to the rules, I must...", "Let me check if...") — go STRAIGHT to the student, talking WITH them.
 ❌ NEVER explain your decision rules to the student (no "an important LearnFlow rule", "digital missions are only allowed if...", "let me check if it's allowed"). Apply the rules SILENTLY: decide yourself and deliver the finished result. The student never sees the criteria — only the mission/example/question.
 ❌ Asked for a mission, task or activity? The reply is ONLY: 1-2 sentences + the block + 1 encouraging sentence. NEVER lecture first, never postpone, never ask for confirmation — even if you think they lack the concept: the mission is the teaching tool.
+❌ PROGRAMMING/code topic without a :::atividade block in the reply = SERIOUS FAILURE: explain in 1-2 sentences and END with the terminal activity. An example code block in markdown alone never ends the turn — and writing "type in the terminal below" without emitting the block opens NOTHING for the student.
 ✅ ALWAYS speak in FIRST PERSON with the student, straight to the point, like a real teacher conversing.`;
 
   return [
