@@ -2028,19 +2028,27 @@ function aiUrlList() {
 }
 
 // Lê uma resposta SSE no formato OpenAI e acumula o texto.
-// stallMs: se o stream ficar silencioso por esse tempo (sem nenhum chunk),
-// lança erro — o callAIStream cai pro próximo endpoint em vez de travar.
+// stallMs: se NENHUM CONTEÚDO chegar (delta de texto) por esse tempo, lança
+// erro — o callAIStream cai pro próximo endpoint em vez de travar. Importante:
+// filas (ex.: ": OPENROUTER PROCESSING") mandam comentários SSE infinitos que
+// são bytes mas não são resposta — só delta de conteúdo reseta o relógio.
 async function consumeSSE(res, onChunk, stallMs = 25000) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
   let fullText = '';
+  let lastContentAt = Date.now();
 
   while (true) {
     let readRes;
     if (stallMs > 0) {
+      const remaining = stallMs - (Date.now() - lastContentAt);
+      if (remaining <= 0) {
+        try { reader.cancel(); } catch (e) {}
+        throw new Error('IA sem resposta (conteúdo não chegou a tempo)');
+      }
       let to;
-      const stall = new Promise((_, rej) => { to = setTimeout(() => rej(new Error('stream parado — timeout')), stallMs); });
+      const stall = new Promise((_, rej) => { to = setTimeout(() => rej(new Error('IA sem resposta (conteúdo não chegou a tempo)')), remaining); });
       try {
         readRes = await Promise.race([reader.read(), stall]);
       } catch (err) {
@@ -2066,6 +2074,7 @@ async function consumeSSE(res, onChunk, stallMs = 25000) {
         const parsed = JSON.parse(data);
         const delta = parsed.choices?.[0]?.delta;
         if (delta?.content) {
+          lastContentAt = Date.now(); // conteúdo real chegou — reseta o relógio
           fullText += delta.content;
           onChunk(delta.content, fullText);
         }

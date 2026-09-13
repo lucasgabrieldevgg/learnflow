@@ -6,15 +6,17 @@
 //
 // v3 — BLINDAGEM DE TIMEOUT: um provedor pendurado NUNCA mais trava a resposta.
 //  - 12s para receber headers do provedor (fetch com AbortSignal)
-//  - 20s de silêncio entre chunks do stream → aborta e tenta o próximo modelo
+//  - 20s de silêncio total entre chunks → aborta e tenta o próximo modelo
+//  - 20s sem NENHUM conteúdo real (ex.: fila "OPENROUTER PROCESSING" manda
+//    comentários SSE infinitos que não são resposta) → próximo modelo
 //  - deadline global de 55s para a cascata inteira
-//  - se o stream já entregou dados ao cliente, não troca de modelo (evita
-//    concatenar duas respostas); entrega o que deu
+//  - se já entregou conteúdo ao cliente, não troca de modelo; entrega o que deu
 
 export const maxDuration = 60; // teto da função serverless (compatível com Hobby)
 
 const HEADERS_TIMEOUT_MS = 12000; // tempo p/ o provedor devolver headers
-const CHUNK_STALL_MS = 20000;     // silêncio entre chunks que aborta o modelo
+const CHUNK_STALL_MS = 20000;     // silêncio total entre chunks que aborta o modelo
+const FIRST_CONTENT_MS = 20000;   // tempo máx. até o primeiro chunk com conteúdo real
 const GLOBAL_DEADLINE_MS = 55000; // teto total da cascata
 
 // Provedores em ordem de preferência. Cada um tem sua base, sua env var
@@ -102,7 +104,7 @@ export default async function handler(req, res) {
 
       const ac = new AbortController();
       let streamStarted = false;
-      let gotAnyChunk = false;
+      let gotData = false; // já passou chunk com "data:" (conteúdo real — comentários de fila não contam)
 
       try {
         let r;
@@ -135,26 +137,40 @@ export default async function handler(req, res) {
         }
 
         res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
-        res.setHeader('Cache-Control', 'no-cache, no-transform');
-        res.setHeader('X-Accel-Buffering', 'no');
-        res.setHeader('X-LF-Provider', `${provider.name}/${model}`);
+        try {
+          // headers podem já ter sido enviados se um modelo anterior soltou comentários de fila
+          res.setHeader('Cache-Control', 'no-cache, no-transform');
+          res.setHeader('X-Accel-Buffering', 'no');
+          res.setHeader('X-LF-Provider', `${provider.name}/${model}`);
+        } catch (_) {}
         streamStarted = true;
 
         const reader = r.body.getReader();
         const decoder = new TextDecoder();
+
+        // Watchdog de primeiro conteúdo: filas (ex.: ": OPENROUTER PROCESSING")
+        // mandam comentários SSE infinitos que NÃO são resposta. Se em
+        // FIRST_CONTENT_MS nada com "data:" chegar, aborta e tenta o próximo modelo.
+        let firstDataTimer = setTimeout(() => ac.abort('sem conteúdo (fila)'), FIRST_CONTENT_MS);
+
         while (true) {
-          // Watchdog: silêncio de CHUNK_STALL_MS entre chunks aborta este modelo
-          const stallTimer = setTimeout(() => ac.abort('stream parado'), CHUNK_STALL_MS);
+          // Watchdog de silêncio total (só depois do 1º conteúdo)
+          const stallTimer = gotData ? setTimeout(() => ac.abort('stream parado'), CHUNK_STALL_MS) : null;
           let chunk;
           try {
             chunk = await reader.read();
           } finally {
-            clearTimeout(stallTimer);
+            if (stallTimer) clearTimeout(stallTimer);
           }
           const { done, value } = chunk;
           if (done) break;
-          gotAnyChunk = true;
-          res.write(decoder.decode(value, { stream: true }));
+          const s = decoder.decode(value, { stream: true });
+          if (!gotData && s.includes('data:')) {
+            gotData = true;
+            clearTimeout(firstDataTimer);
+            firstDataTimer = null;
+          }
+          res.write(s);
         }
         return res.end();
       } catch (e) {
@@ -164,10 +180,10 @@ export default async function handler(req, res) {
           attempts.push({ provider: provider.name, model, note });
           continue;
         }
-        if (!gotAnyChunk) {
-          // headers OK mas nenhum chunk chegou (stream "zumbi") — nada foi
-          // escrito pro cliente, então ainda dá pra tentar o próximo modelo
-          attempts.push({ provider: provider.name, model, note: 'sem chunks: ' + note });
+        if (!gotData) {
+          // só comentários de fila (ou nada útil) chegou — o cliente ainda não
+          // recebeu resposta, então dá pra tentar o próximo modelo
+          attempts.push({ provider: provider.name, model, note: 'sem conteúdo: ' + note });
           continue;
         }
         // stream já entregou dados: NÃO troca de modelo (evitaria duas
