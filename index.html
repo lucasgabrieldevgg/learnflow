@@ -763,6 +763,39 @@
   .mc-done { margin-top: 8px; color: var(--success); font-weight: 700; font-size: 13px; }
   .mission-card-creating { border-style: dashed; color: var(--text-dim); font-size: 12px; padding: 8px 12px; }
 
+  /* ===== Atividades interativas (terminal + notas) ===== */
+  .activity-card {
+    border: 1px solid #6366f1;
+    background: rgba(99, 102, 241, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 8px 0;
+  }
+  .ac-head { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+  .ac-kind { font-size: 10.5px; font-weight: 700; color: #818cf8; letter-spacing: 0.4px; text-transform: uppercase; }
+  .ac-title { font-weight: 700; font-size: 14px; }
+  .ac-task { font-size: 13px; line-height: 1.55; margin-bottom: 8px; }
+  .ac-editor {
+    width: 100%; box-sizing: border-box;
+    background: #0b1220; color: #e2e8f0;
+    border: 1px solid var(--border); border-radius: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.6;
+    padding: 10px; resize: vertical; min-height: 96px;
+  }
+  .ac-editor.ac-notes { font-family: inherit; font-size: 13px; background: var(--bg-2); color: var(--text); }
+  .ac-editor:focus { outline: none; border-color: #818cf8; }
+  .ac-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .ac-output {
+    margin: 8px 0 0; padding: 10px;
+    background: #0b1220; color: #a7f3d0;
+    border: 1px solid var(--border); border-radius: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.6;
+    white-space: pre-wrap; overflow-x: auto;
+  }
+  .ac-hint { margin-top: 8px; margin-bottom: 4px; font-size: 12px; color: var(--text-dim); }
+
   .missions-drawer {
     position: fixed;
     bottom: 94px; right: 24px;
@@ -1180,6 +1213,15 @@ const I18N = {
     'mission-where-site': '📍 Aqui no site',
     'mission-where-world': '🌍 No mundo real',
     'mission-answer-btn': '✏️ Responder aqui',
+    'activity-terminal': 'Terminal de código',
+    'activity-notes': 'Bloco de notas',
+    'activity-run': '▶ Executar',
+    'activity-send': '📨 Enviar pra tutora',
+    'activity-editor-ph': '// Escreva seu código aqui',
+    'activity-notes-ph': 'Escreva suas anotações aqui…',
+    'activity-timeout': 'Tempo esgotado — será que tem loop infinito aí?',
+    'activity-run-first': 'Roda o código primeiro (▶) pra gente conferir 🙂',
+    'activity-empty-notes': 'Escreve algo no bloco primeiro 🙂',
     'fab-title': 'Falar com a tutora',
     'fab-send': 'Enviar',
     'fab-hint': 'Aperte 🎤 e fale — ou digite',
@@ -1286,6 +1328,15 @@ const I18N = {
     'mission-where-site': '📍 Right here, on the site',
     'mission-where-world': '🌍 In the real world',
     'mission-answer-btn': '✏️ Answer here',
+    'activity-terminal': 'Code terminal',
+    'activity-notes': 'Notepad',
+    'activity-run': '▶ Run',
+    'activity-send': '📨 Send to tutor',
+    'activity-editor-ph': '// Write your code here',
+    'activity-notes-ph': 'Write your notes here…',
+    'activity-timeout': "Timed out — maybe there's an infinite loop?",
+    'activity-run-first': 'Run the code first (▶) so I can check 🙂',
+    'activity-empty-notes': 'Write something in the notepad first 🙂',
     'fab-title': 'Talk to the tutor',
     'fab-send': 'Send',
     'fab-hint': 'Tap 🎤 and speak — or type below',
@@ -1392,6 +1443,15 @@ const I18N = {
     'mission-where-site': '📍 Aquí en el sitio',
     'mission-where-world': '🌍 En el mundo real',
     'mission-answer-btn': '✏️ Responder aquí',
+    'activity-terminal': 'Terminal de código',
+    'activity-notes': 'Bloc de notas',
+    'activity-run': '▶ Ejecutar',
+    'activity-send': '📨 Enviar a la tutora',
+    'activity-editor-ph': '// Escribe tu código aquí',
+    'activity-notes-ph': 'Escribe tus anotaciones aquí…',
+    'activity-timeout': 'Tiempo agotado — ¿habrá un bucle infinito?',
+    'activity-run-first': 'Ejecuta el código primero (▶) para revisarlo 🙂',
+    'activity-empty-notes': 'Escribe algo en el bloc primero 🙂',
     'fab-title': 'Hablar con la tutora',
     'fab-send': 'Enviar',
     'fab-hint': 'Toca 🎤 y habla — o escribe abajo',
@@ -1498,6 +1558,15 @@ const I18N = {
     'mission-where-site': '📍 Ici, sur le site',
     'mission-where-world': '🌍 Dans le monde réel',
     'mission-answer-btn': '✏️ Répondre ici',
+    'activity-terminal': 'Terminal de code',
+    'activity-notes': 'Bloc-notes',
+    'activity-run': '▶ Exécuter',
+    'activity-send': '📨 Envoyer à la tutrice',
+    'activity-editor-ph': '// Écris ton code ici',
+    'activity-notes-ph': 'Écris tes notes ici…',
+    'activity-timeout': 'Délai dépassé — une boucle infinie, peut-être ?',
+    'activity-run-first': 'Exécute d’abord le code (▶) pour que je vérifie 🙂',
+    'activity-empty-notes': 'Écris quelque chose dans le bloc-notes d’abord 🙂',
     'fab-title': 'Parler au tuteur',
     'fab-send': 'Envoyer',
     'fab-hint': 'Appuie sur 🎤 et parle — ou écris ci-dessous',
@@ -1604,6 +1673,15 @@ const I18N = {
     'mission-where-site': '📍 Hier auf der Seite',
     'mission-where-world': '🌍 In der echten Welt',
     'mission-answer-btn': '✏️ Hier antworten',
+    'activity-terminal': 'Code-Terminal',
+    'activity-notes': 'Notizblock',
+    'activity-run': '▶ Ausführen',
+    'activity-send': '📨 An die Tutorin senden',
+    'activity-editor-ph': '// Schreibe hier deinen Code',
+    'activity-notes-ph': 'Schreibe hier deine Notizen…',
+    'activity-timeout': 'Zeit abgelaufen — vielleicht eine Endlosschleife?',
+    'activity-run-first': 'Führe zuerst den Code aus (▶), damit ich prüfen kann 🙂',
+    'activity-empty-notes': 'Schreibe zuerst etwas in den Notizblock 🙂',
     'fab-title': 'Mit dem Tutor sprechen',
     'fab-send': 'Senden',
     'fab-hint': 'Tippe auf 🎤 und sprich — oder tippe unten',
@@ -1710,6 +1788,15 @@ const I18N = {
     'mission-where-site': '📍 Qui, sul sito',
     'mission-where-world': '🌍 Nel mondo reale',
     'mission-answer-btn': '✏️ Rispondi qui',
+    'activity-terminal': 'Terminale di codice',
+    'activity-notes': 'Blocco note',
+    'activity-run': '▶ Esegui',
+    'activity-send': '📨 Invia alla tutor',
+    'activity-editor-ph': '// Scrivi qui il tuo codice',
+    'activity-notes-ph': 'Scrivi qui le tue note…',
+    'activity-timeout': 'Tempo scaduto — forse c’è un loop infinito?',
+    'activity-run-first': 'Prima esegui il codice (▶) così controllo 🙂',
+    'activity-empty-notes': 'Prima scrivi qualcosa nel blocco note 🙂',
     'fab-title': 'Parla con il tutor',
     'fab-send': 'Invia',
     'fab-hint': 'Tocca 🎤 e parla — o scrivi qui sotto',
@@ -1816,6 +1903,15 @@ const I18N = {
     'mission-where-site': '📍 サイト内で',
     'mission-where-world': '🌍 現実世界で',
     'mission-answer-btn': '✏️ ここで答える',
+    'activity-terminal': 'コードターミナル',
+    'activity-notes': 'ノートパッド',
+    'activity-run': '▶ 実行',
+    'activity-send': '📨 チューターに送る',
+    'activity-editor-ph': '// ここにコードを書いてください',
+    'activity-notes-ph': 'ここにメモを書いてください…',
+    'activity-timeout': 'タイムアウト — 無限ループがあるかも？',
+    'activity-run-first': '先にコードを実行（▶）してから送ってね 🙂',
+    'activity-empty-notes': '先にノートに何か書いてね 🙂',
     'fab-title': '先生と話す',
     'fab-send': '送信',
     'fab-hint': '🎤を押して話そう — 下に入力してもOK',
@@ -1922,6 +2018,15 @@ const I18N = {
     'mission-where-site': '📍 在网站内',
     'mission-where-world': '🌍 在现实世界中',
     'mission-answer-btn': '✏️ 在这里回答',
+    'activity-terminal': '代码终端',
+    'activity-notes': '记事本',
+    'activity-run': '▶ 运行',
+    'activity-send': '📨 发给辅导老师',
+    'activity-editor-ph': '// 在这里写你的代码',
+    'activity-notes-ph': '在这里写下你的笔记…',
+    'activity-timeout': '超时了 — 是不是有死循环？',
+    'activity-run-first': '先运行代码（▶）再让我检查哦 🙂',
+    'activity-empty-notes': '先在记事本里写点东西哦 🙂',
     'fab-title': '和老师对话',
     'fab-send': '发送',
     'fab-hint': '点 🎤 说话 — 或在下面输入',
@@ -2032,7 +2137,7 @@ function aiUrlList() {
 // erro — o callAIStream cai pro próximo endpoint em vez de travar. Importante:
 // filas (ex.: ": OPENROUTER PROCESSING") mandam comentários SSE infinitos que
 // são bytes mas não são resposta — só delta de conteúdo reseta o relógio.
-async function consumeSSE(res, onChunk, stallMs = 25000) {
+async function consumeSSE(res, onChunk, stallMs = 25000, validate = null) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
@@ -2076,12 +2181,39 @@ async function consumeSSE(res, onChunk, stallMs = 25000) {
         if (delta?.content) {
           lastContentAt = Date.now(); // conteúdo real chegou — reseta o relógio
           fullText += delta.content;
+          // Validação em pleno voo: se a resposta já veio estragada (erro de
+          // cota disfarçado, vazamento de raciocínio, texto degenerado), aborta
+          // AGORA — o usuário não fica vendo o lixo ser digitado.
+          if (validate) {
+            const bad = validate(fullText);
+            if (bad) {
+              try { reader.cancel(); } catch (e) {}
+              throw new Error(bad);
+            }
+          }
           onChunk(delta.content, fullText);
         }
-      } catch (e) {}
+      } catch (e) {
+        if (e && e.message && !/JSON/i.test(e.message)) throw e;
+      }
     }
   }
   return fullText;
+}
+
+// Provedores gratuitos às vezes estragam a resposta em HTTP 200. Detectamos
+// os três padrões conhecidos e tratamos como falha para cair no próximo:
+// 1) erro de cota/limite disfarçado de resposta (Pollinations/OpenRouter);
+// 2) vazamento de raciocínio interno/meta-texto (modelo "pensando alto");
+// 3) saída degenerada (mesmo fragmento curto repetido dezenas de vezes).
+const LF_BAD_RE = /edit-key|agent_key_budget|reached its (budget|limit)|api key used for this request|raise the key budget|topping up the wallet|insufficient_quota|quota (exceeded|exhausted)|rate limit exceeded|enter\.pollinations\.ai/i;
+const LF_META_RE = /to ensure i follow (all|the) (rules|guidelines)|the prompt says|my (response|answer|reply) (is|looks) compliant|i'?ll (now )?(write|output) (the )?mission|relendo (as|minhas) instru[cç][oõ]es|o prompt (diz|manda)|para garantir que (sigo|cumpro) (todas )?as regras|minha resposta (est[áa]|fica) conforme|vou escrever a miss[ãa]o (e|agora|depois)|let me (re-?read|check) (the )?(prompt|rules) to|here'?s a thinking process|thinking process:|the user is asking for|looking at the rules, i need|(?:segundo|de acordo com) (?:as|minhas) (?:regras|instruções)|o aluno pediu [^.]{0,100}\b(?:preciso|devo)\b|(?:preciso|devo) (?:emitir|escrever|colocar) (?:o|a) (?:bloco|missão|atividade)|preciso entregar no mesmo turno/i;
+const LF_DEGEN_RE = /([a-zà-ú]{2,8})\1{12,}/i;
+function lfValidateOutput(txt) {
+  if (LF_BAD_RE.test(txt)) return 'provedor sem crédito/limite — erro disfarçado de resposta';
+  if (LF_META_RE.test(txt)) return 'vazamento de raciocínio/meta-texto na resposta';
+  if (LF_DEGEN_RE.test(txt)) return 'saída degenerada (fragmento repetido sem parar)';
+  return null;
 }
 
 // Streaming version — word-by-word response, com fallback de endpoint
@@ -2105,13 +2237,11 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
         signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(75000) : undefined,
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const fullText = await consumeSSE(res, onChunk, 25000);
+      const fullText = await consumeSSE(res, onChunk, 25000, lfValidateOutput);
       if (!fullText.trim()) throw new Error('resposta vazia');
-      // Provedores às vezes devolvem erro de cota como se fosse resposta (HTTP 200).
-      // Detecta o padrão e trata como falha para tentar o próximo endpoint.
-      if (/edit-key|reached its (budget|limit)|API key used for this request|insufficient_quota|quota (exceeded|exhausted)|rate limit exceeded/i.test(fullText)) {
-        throw new Error('provedor sem crédito/limite — resposta de erro disfarçada');
-      }
+      // Checagem final (cobre o caso de o stream terminar exatamente no limite)
+      const bad = lfValidateOutput(fullText);
+      if (bad) throw new Error(bad);
       aiWorkingUrl = url;
       return fullText;
     } catch (err) {
@@ -2184,7 +2314,13 @@ Se o aluno travar, NÃO insista no mesmo nível. Desça UMA etapa e identifique 
 ### 5. Prática ativa
 Mande o aluno FAZER: um exercício curto, uma pergunta aplicada, algo para tentar agora.
 ### 6. Abstração (fechamento)
-Quando ele dominar no concreto, mostre o MESMO raciocínio sem o contexto — a notação formal, a questão de prova limpa. Assim ele não fica dependente da analogia.` : `## CORE PRINCIPLE (the most important one)
+Quando ele dominar no concreto, mostre o MESMO raciocínio sem o contexto — a notação formal, a questão de prova limpa. Assim ele não fica dependente da analogia.
+
+### AULA EM MICRODOSES (a forma de cada resposta)
+- UMA coisa por vez: UM conceito, UM exemplo, UMA pergunta.
+- UMA pergunta por mensagem — nunca uma lista de perguntas.
+- Fique na borda do possível: a pergunta não pode ser trivial nem impossível — o aluno chega lá com um empurrãozinho (zona de desenvolvimento proximal).
+- Acertou? Suba o nível na hora. Errou? Não repita: mude a representação.` : `## CORE PRINCIPLE (the most important one)
 **If the student didn't understand, CHANGE THE REPRESENTATION — never repeat the same explanation.**
 Repeating with different words doesn't work. Switch tools:
 - an analogy inside the student's universe
@@ -2206,7 +2342,13 @@ If the student gets stuck, do NOT insist at the same level. Go down ONE step and
 ### 5. Active practice
 Have the student DO something: a short exercise, an applied question, something to try now.
 ### 6. Abstraction (closing)
-Once they master it in the concrete, show the SAME reasoning without the context — formal notation, the clean exam question. That way they don't stay dependent on the analogy.`;
+Once they master it in the concrete, show the SAME reasoning without the context — formal notation, the clean exam question. That way they don't stay dependent on the analogy.
+
+### MICRO-LESSONS (the shape of every reply)
+- ONE thing at a time: ONE concept, ONE example, ONE question.
+- ONE question per message — never a list of questions.
+- Stay at the edge of the possible: the question must be neither trivial nor impossible — the student gets there with a small push (zone of proximal development).
+- Got it right? Raise the level right away. Got it wrong? Don't repeat: change the representation.`;
 
   const learnSection = isPortuguese ? `## MODO ATUAL: APRENDIZAGEM (todas as ajudas ligadas)
 
@@ -2259,12 +2401,21 @@ Real learning involves writing. In practical steps:
 - Every 5 questions (or when the student asks), give a report: hits, misses, error patterns and what to review.`;
 
   const missionsSection = isPortuguese ? `## MISSÕES PRÁTICAS (só no modo aprendizagem)
-Quando o aluno terminar de entender um conceito (etapas 3-5 do fluxo) ou pedir, proponha UMA missão prática personalizada:
+### PROTOCOLO DE ENTREGA (leia primeiro)
+Quando o aluno pedir missão, tarefa, desafio ou atividade — de qualquer jeito — a resposta é EXATAMENTE:
+1-2 frases curtas de contexto → o bloco (formato abaixo) → 1 frase final de incentivo.
+NADA mais: sem lição antes, sem regras, sem pedir confirmação, sem "antes de te passar o desafio". Mesmo que você ache que ele ainda não domina o conceito, mande a missão — a missão É a ferramenta de ensino.
+Quando o aluno terminar de entender um conceito (etapas 3-5 do fluxo), proponha UMA missão prática personalizada:
 - Curta (5-15 min), concreta e possível de conferir — sempre dentro do universo do aluno
 - A missão pode acontecer em DOIS LUGARES — escolha e marque no campo "onde":
   • onde: site → ele resolve AQUI NO CHAT (um problema pra resolver, um desafio, um exercício que você montou); quando ele responder, você confere na hora
   • onde: mundo → ele faz FORA DO SITE, na vida real ou no papel (observar, calcular, medir, criar, perguntar a alguém) e depois conta o resultado pra você
-- Como escolher: se o conteúdo dá pra praticar direto numa conversa, use site; se precisa de objetos, pessoas, lugares ou anotações do dia a dia, use mundo. Alterne — não seja sempre o mesmo tipo.
+- Como escolher (REGRA DO TECLADO): onde: site SÓ quando a tarefa é 100% resolvível digitando aqui no chat — responder, calcular de cabeça, explicar com as próprias palavras. Se precisar de QUALQUER coisa fora do teclado (objetos físicos, papel e caneta, medir, observar, contar coisas de verdade, falar com alguém) → onde: mundo. Teste rápido: a tarefa diz "pegue objetos", "anote no papel", "em casa"? Então é MUNDO, nunca site.
+- Programação e lógica de código: NUNCA use missão site em texto — nesse assunto a prática é SEMPRE uma ATIVIDADE DE TERMINAL (seção abaixo), com o aluno escrevendo e rodando código de verdade. "Missão digital" em programação É a atividade de terminal.
+- ENTREGA NA HORA: se o aluno pedir missão, tarefa ou atividade, entregue no MESMO turno, com o bloco. Nunca adie ("primeiro vamos...", "depois que você..."), nunca peça permissão, nunca exigir "passo de raciocínio" antes — proponha já.
+- RECEITA DA RESPOSTA COM MISSÃO: 1-2 frases curtas de contexto → o bloco :::missao (ou :::atividade) → 1 frase final de incentivo. Nada além disso.
+- ERRADO: explicar como você decide o tipo de missão, dizer que "a missão digital só vale se...", ou pedir para o aluno confirmar antes. CERTO: entregar o bloco direto, como se lançasse a missão de bandeja.
+- Alterne entre site e mundo — não seja sempre o mesmo tipo.
 - Formato OBRIGATÓRIO (exatamente assim, sem markdown dentro do bloco):
 :::missao
 titulo: <nome curto e divertido>
@@ -2272,17 +2423,26 @@ onde: site
 tarefa: <o que ele deve fazer, em 1-3 passos>
 verificar: <resultado esperado, pra você conferir depois — sem entregar a resposta>
 :::
+- O BLOCO É OBRIGATÓRIO E INtransferível: quando o aluno pedir missão, tarefa ou desafio (de qualquer jeito — "missão digital", "outra missão", "pode me passar uma tarefa?"), sua resposta TEM que conter o bloco :::missao (ou :::atividade, se for terminal). Descrever a missão em texto comum NÃO vale — sem o bloco, nada vira card e o aluno fica sem missão. Escreva o bloco sempre no FINAL da resposta, depois de 1-2 frases de contexto.
 - No campo "onde" escreva só "site" ou "mundo".
 - Depois do bloco, escreva UMA frase curta incentivando.
-- Só UMA missão por vez; se ele pedir outra, crie uma variação diferente.
+- Só UMA missão por vez; se ele pedir outra (mesmo que tenha acabado de receber uma), crie uma VARIÇÃO DIFERENTE imediatamente — nunca pergunte se ele prefere outro tipo.
 - Missão site: quando ele mandar a resposta no chat, confira com rigor contra "verificar" — se estiver errado, NÃO entregue a resposta; dê uma dica e peça de novo.
-- Missão mundo: quando ele contar o resultado, verifique socraticamente (pergunte como chegou lá), confirme ou peça revisão — só então celebre.` : `## PRACTICAL MISSIONS (learning mode only)
-When the student finishes understanding a concept (steps 3-5 of the flow) or asks, propose ONE personalized practical mission:
+- Missão mundo: quando ele contar o resultado, verifique socraticamente (pergunte como chegou lá), confirme ou peça revisão — só então celebre.` : `### DELIVERY PROTOCOL (read this first)
+When the student asks for a mission, task, challenge or activity — in any phrasing — the reply is EXACTLY:
+1-2 short context sentences → the block (format below) → 1 final encouraging sentence.
+NOTHING more: no lesson first, no rules, no asking for confirmation, no "before I give you the challenge". Even if you think they don't master the concept yet, send the mission — the mission IS the teaching tool.
+When the student finishes understanding a concept (steps 3-5 of the flow), propose ONE personalized practical mission:
 - Short (5-15 min), concrete and verifiable — always inside the student's universe
 - A mission can happen in TWO PLACES — choose and mark it in the "onde" field:
   • onde: site → they solve it RIGHT HERE IN THE CHAT (a problem to solve, a challenge, an exercise you set up); when they answer, you check it right away
   • onde: mundo → they do it OUTSIDE THE SITE, in real life or on paper (observe, calculate, measure, create, ask someone) and then report the result back to you
-- How to choose: if the content can be practiced directly in a conversation, use site; if it needs objects, people, places or everyday notes, use mundo. Alternate — don't always pick the same type.
+- How to choose (KEYBOARD RULE): onde: site ONLY when the task is 100% solvable by typing here in the chat — answering, mental math, explaining in their own words. If it needs ANYTHING beyond the keyboard (physical objects, pen and paper, measuring, observing, counting real things, talking to someone) → onde: mundo. Quick test: does the task say "grab objects", "write on paper", "at home"? Then it is MUNDO (world), never site.
+- Programming and code logic: NEVER use a text site mission — for this subject practice is ALWAYS a TERMINAL ACTIVITY (section below), with the student writing and running real code. A "digital mission" for programming IS the terminal activity.
+- DELIVER RIGHT AWAY: if the student asks for a mission, task or activity, deliver it in the SAME turn, with the block. Never postpone ("first let's...", "after you..."), never ask for permission, never demand a "reasoning step" first — just propose it.
+- REPLY RECIPE WITH MISSION: 1-2 short context sentences → the :::missao (or :::atividade) block → 1 final encouraging sentence. Nothing else.
+- WRONG: explaining how you decide the mission type, saying "a digital mission only counts if...", or asking the student to confirm first. RIGHT: deliver the block straight away, as if serving the mission on a tray.
+- Alternate between site and world — don't always pick the same type.
 - MANDATORY format (exactly like this, no markdown inside the block):
 :::missao
 titulo: <short fun name>
@@ -2291,10 +2451,69 @@ tarefa: <what they should do, in 1-3 steps>
 verificar: <expected result for you to check later — without giving the answer away>
 :::
 - In the "onde" field write only "site" or "mundo".
+- THE BLOCK IS MANDATORY: when the student asks for a mission, task or challenge (any phrasing — "digital mission", "another mission", "can you give me a task?"), your reply MUST contain the :::missao block (or :::atividade, for terminal tasks). Describing the mission in plain text does NOT count — without the block nothing becomes a card and the student is left without a mission. Write the block at the END of the reply, after 1-2 sentences of context.
 - After the block, write ONE short encouraging sentence.
-- Only ONE mission at a time; if they ask for another, create a different variation.
+- Only ONE mission at a time; if they ask for another (even if they just got one), immediately create a DIFFERENT variation — never ask whether they would prefer another type.
 - site mission: when they send the answer in the chat, grade it rigorously against "verificar" — if wrong, do NOT give the answer away; give a hint and ask again.
 - mundo mission: when they report the result, verify socratically (ask how they got there), confirm or request revision — only then celebrate.`;
+
+  const activitiesSection = isPortuguese
+    ? `## ATIVIDADES INTERATIVAS (terminal de código e bloco de notas)
+O site tem ferramentas que você pode abrir na conversa do aluno: um TERMINAL onde ele escreve e EXECUTA código de verdade (JavaScript), e um BLOCO DE NOTAS onde ele escreve um texto e te manda.
+### Quando usar
+- Programação, lógica, algoritmos, matemática de código: depois de explicar um conceito, proponha uma atividade DE TERMINAL — o aluno aprende de verdade escrevendo e rodando, como nas melhores plataformas de código do mundo.
+- Se o aluno pedir para praticar código ("me dá uma atividade com código", "quero executar algo"), entregue a atividade de terminal NO MESMO turno — nunca diga que precisa fazer outra coisa antes.
+- Redação, explicação com as próprias palavras, planejamento, resumo: proponha o BLOCO DE NOTAS.
+- No Modo Prova não proponha atividades. Prática com objetos físicos e mundo real continua sendo :::missao.
+### Formato OBRIGATÓRIO (exatamente assim, sem markdown dentro do bloco)
+:::atividade
+tipo: terminal
+titulo: <nome curto e divertido>
+enunciado: <o que ele deve fazer com o código, em 1-3 frases>
+linguagem: javascript
+codigo-inicial: <código inicial pronto pra rodar, pode ter várias linhas; deixe vazio se não precisar>
+esperado: <o que deve aparecer no terminal quando estiver certo — sem escrever a solução>
+:::
+ou
+:::atividade
+tipo: notas
+titulo: <nome curto>
+enunciado: <o que ele deve escrever no bloco>
+:::
+### Regras
+- O bloco :::atividade é a ÚNICA forma de abrir o terminal ou o bloco de notas: escrever "use o terminal" ou "sua missão é no terminal" no texto NÃO abre nada — a ferramenta só aparece se você emitir o bloco formatado.
+- UMA atividade por mensagem — e nunca junto com :::missao na mesma resposta.
+- O codigo-inicial NUNCA contém a solução: no máximo a estrutura pronta com uma lacuna comentada (// complete aqui).
+- A linguagem do terminal é javascript — escreva o codigo-inicial em JavaScript funcional.
+- Quando o aluno mandar o resultado do terminal, compare com "esperado" e conduza socraticamente: se deu diferente, aponte O QUE fugiu do esperado e pergunte por que aconteceu isso — NUNCA reescreva o código dele de primeira. Se deu certo, celebre e proponha o próximo degrau (um pouco mais difícil).`
+    : `## INTERACTIVE ACTIVITIES (code terminal and notepad)
+The site has tools you can open in the student's conversation: a TERMINAL where they write and RUN real code (JavaScript), and a NOTEPAD where they write a text and send it to you.
+### When to use
+- Programming, logic, algorithms, code math: after explaining a concept, propose a TERMINAL activity — students truly learn by writing and running code, like the best coding platforms in the world.
+- If the student asks to practice code ("give me a coding activity", "I want to run something"), deliver the terminal activity in the SAME turn — never say you need to do something else first.
+- Essays, explaining in their own words, planning, summaries: propose the NOTEPAD.
+- In Exam Mode do not propose activities. Practice with physical objects and the real world stays as :::missao.
+### MANDATORY format (exactly like this, no markdown inside the block)
+:::atividade
+tipo: terminal
+titulo: <short fun name>
+enunciado: <what they should do with the code, in 1-3 sentences>
+linguagem: javascript
+codigo-inicial: <starter code ready to run, can be multiple lines; leave empty if not needed>
+esperado: <what the terminal should show when it is right — without writing the solution>
+:::
+or
+:::atividade
+tipo: notas
+titulo: <short name>
+enunciado: <what they should write in the notepad>
+:::
+### Rules
+- The :::atividade block is the ONLY way to open the terminal or the notepad: writing "use the terminal" or "your mission is in the terminal" in the text does NOT open anything — the tool only appears if you emit the formatted block.
+- ONE activity per message — and never together with :::missao in the same reply.
+- The codigo-inicial NEVER contains the solution: at most the ready structure with one commented gap (// complete here).
+- The terminal language is javascript — write the codigo-inicial in working JavaScript.
+- When the student sends the terminal result, compare with "esperado" and guide socratically: if it differs, point out WHAT escaped the expectation and ask why it happened — NEVER rewrite their code right away. If correct, celebrate and propose the next step (a bit harder).`;
 
   const never = isPortuguese ? `## O QUE NUNCA FAZER
 ❌ NUNCA use jargão técnico sem explicar em linguagem simples antes
@@ -2356,14 +2575,39 @@ Lembre-se: o aluno veio até você porque QUER APRENDER. Seu trabalho é garanti
 
 Remember: the student came to you because they WANT TO LEARN. Your job is to ensure they leave each conversation understanding something they didn't before. 💪`;
 
+  const hygiene = isPortuguese
+    ? `## COMO VOCÊ ESCREVE — HIGIENE DE SAÍDA (a regra mais importante de todas)
+Sua resposta é a mensagem final que o aluno lê no chat. Você escreve APENAS ela — nada mais existe.
+❌ NUNCA escreva raciocínio interno, rascunho, planejamento ou autocrítica ("deixa eu reler as instruções", "minha resposta está conforme as regras", "agora vou escrever a missão"). Isso quebra completamente a experiência e é a pior falha possível.
+❌ NUNCA comente, mencione ou insinue que você tem instruções, prompt, regras internas ou modo de funcionamento.
+❌ NUNCA produza palavras repetidas ou sem sentido (ex.: "ells ells ells", "massellsells"). Perdeu o fio? Recomece a frase com linguagem humana perfeita.
+❌ NUNCA misture outra língua no meio de uma frase em português (escrever "type 10 + 5" no meio de um texto em português está ERRADO).
+❌ NUNCA desenhe diagramas com caixas ASCII de TRAÇO DUPLO (╔══╗, ║ ║) — desalinham e confundem. Para visualizar: passos numerados (Passo 1 → Passo 2 → Passo 3), tabelas markdown ou setas simples. Caixa simples bem alinhada (┌──┐ │ x = 5 │ └──┘) só quando o aluno pedir visualização explícita.
+❌ NUNCA comece a resposta narrando a situação ou pensando em voz alta ("O aluno pediu...", "Segundo as regras, preciso...", "Vou verificar se...") — vá DIRETO ao aluno, falando COM ele.
+❌ NUNCA explique suas regras de decisão ao aluno (nada de "uma regra importante do LearnFlow", "missão digital só é liberada se...", "deixa eu verificar se pode"). Aplique as regras EM SILÊNCIO: decida você mesmo e entregue o resultado pronto. O aluno nunca vê os critérios — só a missão/exemplo/pergunta.
+❌ Pediu missão, tarefa ou atividade? A resposta é SÓ: 1-2 frases + o bloco + 1 frase de incentivo. NUNCA dê uma lição antes, nunca adie, nunca peça confirmação — mesmo que ache que falta conceito: a missão é a ferramenta de ensino.
+✅ SEMPRE fale na PRIMEIRA PESSOA com o aluno, direto ao ponto, como um professor de verdade conversando.`
+    : `## HOW YOU WRITE — OUTPUT HYGIENE (the most important rule of all)
+Your response is the final message the student reads in the chat. You write ONLY that — nothing else exists.
+❌ NEVER write internal reasoning, drafts, planning or self-critique ("let me re-read the instructions", "my response is compliant with the rules", "now I'll write the mission"). It completely breaks the experience and is the worst possible failure.
+❌ NEVER comment on, mention or hint that you have instructions, a prompt, internal rules or an operating mode.
+❌ NEVER produce repeated or meaningless words (e.g., "ells ells ells"). Lost the thread? Restart the sentence in perfect human language.
+❌ NEVER mix another language in the middle of a sentence.
+❌ NEVER draw DOUBLE-LINE ASCII box diagrams (╔══╗, ║ ║) — they misalign and confuse. To visualize: numbered steps (Step 1 → Step 2 → Step 3), markdown tables or simple arrows. A single-line box kept well-aligned (┌──┐ │ x = 5 │ └──┘) only when the student explicitly asks for a visualization.
+❌ NEVER start the reply narrating the situation or thinking out loud ("The student asked...", "According to the rules, I must...", "Let me check if...") — go STRAIGHT to the student, talking WITH them.
+❌ NEVER explain your decision rules to the student (no "an important LearnFlow rule", "digital missions are only allowed if...", "let me check if it's allowed"). Apply the rules SILENTLY: decide yourself and deliver the finished result. The student never sees the criteria — only the mission/example/question.
+❌ Asked for a mission, task or activity? The reply is ONLY: 1-2 sentences + the block + 1 encouraging sentence. NEVER lecture first, never postpone, never ask for confirmation — even if you think they lack the concept: the mission is the teaching tool.
+✅ ALWAYS speak in FIRST PERSON with the student, straight to the point, like a real teacher conversing.`;
+
   return [
     intro,
     profile,
     mission,
     method,
-    examMode ? examSection : (learnSection + '\n\n' + missionsSection),
+    examMode ? examSection : (learnSection + '\n\n' + missionsSection + '\n\n' + activitiesSection),
     never,
     finals,
+    hygiene, // última seção — o fim do prompt é onde a aderência é mais forte
   ].join('\n\n');
 }
 
@@ -2839,20 +3083,27 @@ function missionCardHtml(m) {
     '</div>';
 }
 
-// Converte blocos :::missao da IA em cards; o resto passa pelo formatMarkdown
+// Converte blocos :::missao e :::atividade da IA em cards; o resto passa pelo formatMarkdown
 function renderRich(text) {
   const s = String(text);
   let html = '';
   let last = 0;
-  const re = /:::missao\s*\n?([\s\S]*?):::/gi;
+  const re = /:::(missao|atividade)\s*\n?([\s\S]*?):::/gi;
   let m;
   while ((m = re.exec(s)) !== null) {
     html += formatMarkdown(s.slice(last, m.index));
-    html += missionCardHtml(parseMissionBody(m[1]));
+    if (m[1].toLowerCase() === 'atividade') {
+      html += activityCardHtml(parseActivityBody(m[2]));
+    } else {
+      html += missionCardHtml(parseMissionBody(m[2]));
+    }
     last = m.index + m[0].length;
   }
   const tail = s.slice(last);
-  const idx = tail.toLowerCase().indexOf(':::missao');
+  const low = tail.toLowerCase();
+  const idxMiss = low.indexOf(':::missao');
+  const idxAct = low.indexOf(':::atividade');
+  const idx = idxMiss >= 0 && (idxAct < 0 || idxMiss < idxAct) ? idxMiss : idxAct;
   if (idx >= 0) {
     html += formatMarkdown(tail.slice(0, idx));
     html += '<div class="mission-card mission-card-creating">📋 ' + escapeHtml(t('mission-creating')) + '</div>';
@@ -2906,6 +3157,132 @@ function buildMissionsContext() {
     ? '\n\n## MISSÕES EM ANDAMENTO (contexto automático — não anuncie esta seção)\nO aluno tem missões pendentes. Se a mensagem dele parecer resposta ou relato de uma delas, verifique contra o campo "verificar" SEM entregar a resposta. Missão [site]: corrija com rigor; se errar, dê uma dica e peça de novo. Missão [mundo]: pergunte COMO ele chegou ao resultado antes de confirmar. Quando acertar, celebre e lembre de marcá-la como concluída.'
     : '\n\n## ONGOING MISSIONS (automatic context — do not announce this section)\nThe student has pending missions. If their message looks like an answer or report for one of them, verify against the "verificar" field WITHOUT giving the answer away. [site] mission: grade rigorously; if wrong, give a hint and ask again. [mundo] mission: ask HOW they got the result before confirming. When correct, celebrate and remind them to mark it done.';
   return head + '\n' + pend.map(m => '- [' + (m.where === 'world' ? 'mundo' : 'site') + '] ' + m.title + ' — ' + m.task + (m.check ? ' | verificar: ' + m.check : '')).join('\n');
+}
+
+// ===================== ATIVIDADES INTERATIVAS (terminal + notas) =====================
+
+// Parser tolerante para o bloco :::atividade — aceita chaves em PT/EN e
+// valores multilinha (o codigo-inicial pode ter várias linhas). Uma linha só
+// abre chave nova se COMEÇAR com uma chave conhecida; senão é continuação.
+function parseActivityBody(body) {
+  const KEYS = ['tipo', 'type', 'titulo', 'title', 'enunciado', 'task', 'prompt', 'linguagem', 'lang', 'codigo-inicial', 'codigo', 'código', 'starter', 'code', 'esperado', 'expected', 'dica', 'hint'];
+  const headRe = new RegExp('^(\\w+(?:-\\w+)*)\\s*:\\s?(.*)$', 'i');
+  const vals = {};
+  let cur = null;
+  for (const rawLine of String(body).split('\n')) {
+    const line = rawLine.replace(/\s+$/, '');
+    const m = line.match(headRe);
+    if (m && KEYS.includes(m[1].toLowerCase())) {
+      cur = m[1].toLowerCase();
+      vals[cur] = (vals[cur] ? vals[cur] + '\n' : '') + m[2].trim();
+    } else if (cur && line.trim()) {
+      vals[cur] += '\n' + line.trim();
+    }
+  }
+  const tipo = (vals.tipo || vals.type || '').toLowerCase();
+  return {
+    kind: /nota|notes?|bloco/.test(tipo) ? 'notas' : 'terminal',
+    title: vals.titulo || vals.title || '',
+    task: vals.enunciado || vals.task || vals.prompt || '',
+    lang: (vals.linguagem || vals.lang || 'javascript').toLowerCase(),
+    starter: (vals['codigo-inicial'] || vals.codigo || vals['código'] || vals.starter || vals.code || '').trim(),
+    expected: vals.esperado || vals.expected || '',
+    hint: vals.dica || vals.hint || '',
+  };
+}
+
+function activityCardHtml(a) {
+  if (!a || !a.title || !a.task) return '';
+  const isNotes = a.kind === 'notas';
+  const kindLabel = isNotes ? '📝 ' + escapeHtml(t('activity-notes')) : '💻 ' + escapeHtml(t('activity-terminal'));
+  return '<div class="activity-card" data-kind="' + a.kind + '">' +
+    '<div class="ac-head"><span class="ac-kind">' + kindLabel + '</span><span class="ac-title">' + escapeHtml(a.title) + '</span></div>' +
+    '<div class="ac-task">' + escapeHtml(a.task) + '</div>' +
+    (a.hint ? '<div class="ac-hint">💡 ' + escapeHtml(a.hint) + '</div>' : '') +
+    (isNotes
+      ? '<textarea class="ac-editor ac-notes" rows="6" placeholder="' + escapeHtml(t('activity-notes-ph')) + '"></textarea>' +
+        '<div class="ac-actions">' +
+        '<button class="mc-btn ac-send" onclick="sendNotes(this)">' + escapeHtml(t('activity-send')) + '</button>' +
+        '</div>'
+      : '<textarea class="ac-editor" rows="6" spellcheck="false" placeholder="' + escapeHtml(t('activity-editor-ph')) + '">' + escapeHtml(a.starter) + '</textarea>' +
+        '<div class="ac-actions">' +
+        '<button class="mc-btn ac-run" onclick="runActivity(this)">' + escapeHtml(t('activity-run')) + '</button>' +
+        '<button class="mc-btn ac-send" onclick="sendActivity(this)">' + escapeHtml(t('activity-send')) + '</button>' +
+        '</div>' +
+        '<pre class="ac-output" style="display:none"></pre>') +
+    '</div>';
+}
+
+// Executa o código do aluno num Web Worker com teto de tempo (4s) — loop
+// infinito não trava a página. Sem Worker (raro), roda direto (fallback).
+const LF_WORKER_SRC = 'self.onmessage=function(e){' +
+  'var logs=[];var fmt=function(v){return typeof v==="string"?v:String(v)};' +
+  'var push=function(p){return function(){var a=[].slice.call(arguments);logs.push(p+a.map(fmt).join(" "))}};' +
+  'var fake={log:push(""),error:push("\\u274c "),warn:push("\\u26a0\\ufe0f "),info:push("")};' +
+  'try{var r=new Function("console","\\"use strict\\";\\n"+e.data)(fake);if(r!==undefined)logs.push("\\u2192 "+fmt(r));}' +
+  'catch(err){logs.push("\\u274c "+(err&&err.message?err.message:String(err)));}' +
+  'self.postMessage(logs.join("\\n")||"(sem sa\\u00edda)");};';
+
+function runActivity(btn) {
+  const card = btn.closest('.activity-card');
+  if (!card) return;
+  const code = card.querySelector('.ac-editor').value;
+  const out = card.querySelector('.ac-output');
+  out.style.display = 'block';
+  out.textContent = '⏳ …';
+  btn.disabled = true;
+  const done = (text) => {
+    out.textContent = text || '(sem saída)';
+    out.dataset.ran = '1';
+    btn.disabled = false;
+  };
+  try {
+    const blob = new Blob([LF_WORKER_SRC], { type: 'application/javascript' });
+    const w = new Worker(URL.createObjectURL(blob));
+    const timer = setTimeout(() => { w.terminate(); done('⏱️ ' + t('activity-timeout')); }, 4000);
+    w.onmessage = (e) => { clearTimeout(timer); w.terminate(); done(e.data); };
+    w.onerror = (e) => { clearTimeout(timer); w.terminate(); done('❌ ' + (e.message || 'erro')); };
+    w.postMessage(code);
+  } catch (err) {
+    const logs = [];
+    const fmt = (v) => typeof v === 'string' ? v : String(v);
+    const push = (p) => (...a) => logs.push(p + a.map(fmt).join(' '));
+    try {
+      const r = new Function('console', '"use strict";\n' + code)({ log: push(''), error: push('❌ '), warn: push('⚠️ '), info: push('') });
+      if (r !== undefined) logs.push('→ ' + fmt(r));
+    } catch (e2) {
+      logs.push('❌ ' + (e2 && e2.message ? e2.message : String(e2)));
+    }
+    done(logs.join('\n'));
+  }
+}
+
+function sendActivity(btn) {
+  const card = btn.closest('.activity-card');
+  if (!card) return;
+  const title = (card.querySelector('.ac-title') || {}).textContent || '';
+  const code = card.querySelector('.ac-editor').value;
+  const out = card.querySelector('.ac-output');
+  if (!out || out.dataset.ran !== '1') { showToast(t('activity-run-first')); return; }
+  const output = out.textContent || '';
+  const isPT = (document.documentElement.lang || 'pt-BR') === 'pt-BR';
+  const msg = isPT
+    ? '💻 Executei a atividade "' + title + '" no terminal.\nMeu código:\n```\n' + code + '\n```\nSaída do terminal:\n```\n' + output + '\n```\nConfere pra mim se está certo?'
+    : '💻 I ran the activity "' + title + '" in the terminal.\nMy code:\n```\n' + code + '\n```\nTerminal output:\n```\n' + output + '\n```\nCan you check if it is right?';
+  sendMessage(msg);
+}
+
+function sendNotes(btn) {
+  const card = btn.closest('.activity-card');
+  if (!card) return;
+  const title = (card.querySelector('.ac-title') || {}).textContent || '';
+  const text = card.querySelector('.ac-editor').value.trim();
+  if (!text) { showToast(t('activity-empty-notes')); return; }
+  const isPT = (document.documentElement.lang || 'pt-BR') === 'pt-BR';
+  const msg = isPT
+    ? '📝 Minha anotação "' + title + '" do bloco de notas:\n' + text + '\n\nPode ler e me dar um feedback?'
+    : '📝 My note "' + title + '" from the notepad:\n' + text + '\n\nPlease read it and give me feedback?';
+  sendMessage(msg);
 }
 
 function updateMissionBadges() {
