@@ -2219,9 +2219,18 @@ function lfValidateOutput(txt) {
 // Detector de recuperação: resposta de programação SEM bloco :::atividade —
 // o aluno vê código de exemplo, mas o terminal não abre. Os provedores free
 // têm aderência parcial à regra do terminal; 1 chamada extra resolve ~90%.
-function lfNeedsActivityRecovery(text) {
+// NÃO dispara quando uma atividade já está em ANDAMENTO (o aluno mandou o
+// resultado do terminal ou a tutora já emitiu :::atividade no ciclo atual):
+// nesse caso citar código é condução socrática legítima — reemitir apagaria
+// o feedback que o aluno está lendo.
+function lfNeedsActivityRecovery(text, messages) {
   if (/:::atividade|:::missao/i.test(text)) return false;
   if (session.mode === 'exam') return false;
+  const hist = messages || [];
+  const lastUser = [...hist].reverse().find(m => m.role === 'user');
+  const lastUserTxt = (lastUser && lastUser.content || '').toLowerCase();
+  if (/executei a atividade|sa[íi]da do terminal|meu c[óo]digo|i ran the activity|terminal output|my code/.test(lastUserTxt)) return false;
+  if (hist.slice(-6).some(m => /:::atividade/i.test(m.content || ''))) return false;
   const hasCodeBlock = /```/.test(text);
   const hasCodeCalls = /console\.log\s*\(|\bprint\s*\(|\bdef\s+\w+\s*\(|\bfunction\s+\w+\s*\(|\bSystem\.out\.print/.test(text);
   return hasCodeBlock || hasCodeCalls;
@@ -2261,7 +2270,7 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
       if (bad) throw new Error(bad);
       // Recuperação de atividade: resposta de programação sem bloco terminal —
       // 1 chamada silenciosa extra; se falhar, mantém a resposta original.
-      if (lfNeedsActivityRecovery(fullText)) {
+      if (lfNeedsActivityRecovery(fullText, messages)) {
         try {
           const rec = await fetch(url, {
             method: 'POST',
@@ -2277,7 +2286,7 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
               reasoning: { effort: 'none' },
               stream: true,
             }),
-            signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(40000) : undefined,
+            signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(25000) : undefined,
           });
           if (rec.ok) {
             const fixed = await consumeSSE(rec, () => {}, 20000, lfValidateOutput);
@@ -3243,7 +3252,10 @@ function parseActivityBody(body) {
     title: vals.titulo || vals.title || '',
     task: vals.enunciado || vals.task || vals.prompt || '',
     lang: (vals.linguagem || vals.lang || 'javascript').toLowerCase(),
-    starter: (vals['codigo-inicial'] || vals.codigo || vals['código'] || vals.starter || vals.code || '').trim(),
+    starter: ((vals['codigo-inicial'] || vals.codigo || vals['código'] || vals.starter || vals.code || '')
+      // remove linhas que são só cursor de terminal (| ou >) — o modelo às vezes
+      // “imita” um prompt e a linha vira erro de sintaxe (Unexpected token '|')
+      .replace(/^\s*[|>\u203a>]\s*$\n?/gm, '')).trim(),
     expected: vals.esperado || vals.expected || '',
     hint: vals.dica || vals.hint || '',
   };
