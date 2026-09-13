@@ -45,6 +45,11 @@ const PROVIDERS = [
     name: 'nvidia',
     base: 'https://integrate.api.nvidia.com/v1',
     envKey: 'NVIDIA_API_KEY',
+    // nemotron PENSE EM VOZ ALTA se não suprimirmos: sem isso o raciocínio
+    // inteiro ("Here's a thinking process:...") vaza no content em HTTP 200.
+    // Validado 2026-09: reasoning:{effort:'none'} é aceito pela NIM e zera o
+    // reasoning_content que vaza no content.
+    useReasoningParam: true,
     extraHeaders: () => ({}),
     models: [
       'nvidia/nemotron-3.5-lightning-30b-a3b',    // o mais rápido do catálogo
