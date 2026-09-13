@@ -2027,15 +2027,32 @@ function aiUrlList() {
   return list;
 }
 
-// Lê uma resposta SSE no formato OpenAI e acumula o texto
-async function consumeSSE(res, onChunk) {
+// Lê uma resposta SSE no formato OpenAI e acumula o texto.
+// stallMs: se o stream ficar silencioso por esse tempo (sem nenhum chunk),
+// lança erro — o callAIStream cai pro próximo endpoint em vez de travar.
+async function consumeSSE(res, onChunk, stallMs = 25000) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
   let fullText = '';
 
   while (true) {
-    const { done, value } = await reader.read();
+    let readRes;
+    if (stallMs > 0) {
+      let to;
+      const stall = new Promise((_, rej) => { to = setTimeout(() => rej(new Error('stream parado — timeout')), stallMs); });
+      try {
+        readRes = await Promise.race([reader.read(), stall]);
+      } catch (err) {
+        clearTimeout(to);
+        try { reader.cancel(); } catch (e) {}
+        throw err;
+      }
+      clearTimeout(to);
+    } else {
+      readRes = await reader.read();
+    }
+    const { done, value } = readRes;
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
@@ -2074,9 +2091,12 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
           reasoning: { effort: 'none' },
           stream: true,
         }),
+        // Teto total por endpoint: mesmo que tudo fique pendurado, o front
+        // desiste e tenta o próximo (75s >> watchdog do proxy de 55s).
+        signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(75000) : undefined,
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const fullText = await consumeSSE(res, onChunk);
+      const fullText = await consumeSSE(res, onChunk, 25000);
       if (!fullText.trim()) throw new Error('resposta vazia');
       // Provedores às vezes devolvem erro de cota como se fosse resposta (HTTP 200).
       // Detecta o padrão e trata como falha para tentar o próximo endpoint.
