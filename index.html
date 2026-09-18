@@ -1124,7 +1124,7 @@
   </div>
 
   <footer>
-    <span data-i18n="footer-made">Feito com</span> 💜 <span data-i18n="footer-by">por</span> <a href="https://github.com/lucasgabrieldevgg" target="_blank" rel="noopener">lucasgabrieldevgg</a> • <span data-i18n="footer-tech">Pollinations AI · 100% no navegador</span>
+    <span data-i18n="footer-made">Feito com</span> 💜 <span data-i18n="footer-by">por</span> <a href="https://github.com/lucasgabrieldevgg" target="_blank" rel="noopener">lucasgabrieldevgg</a> • <span data-i18n="footer-tech">Pollinations AI · 100% no navegador</span> • <span>IA grátis: até 60 perguntas/dia por pessoa</span>
   </footer>
 </div>
 
@@ -2262,7 +2262,7 @@ async function callAIStream(messages, maxTokens = 1500, onChunk = () => {}) {
         // desiste e tenta o próximo (75s >> watchdog do proxy de 55s).
         signal: (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(75000) : undefined,
       });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) throw new Error(res.status === 429 ? 'Você bateu o limite diário de IA (60 perguntas/dia) — volta amanhã! 💙' : 'HTTP ' + res.status);
       const fullText = await consumeSSE(res, onChunk, 25000, lfValidateOutput);
       if (!fullText.trim()) throw new Error('resposta vazia');
       // Checagem final (cobre o caso de o stream terminar exatamente no limite)
