@@ -60,6 +60,19 @@ const PROVIDERS = [
   },
 ];
 
+/* 🚦 Limite diário de IA (generoso) — mantém o site grátis no ar */
+const LIMITE_DIA=60;
+const _HITS=new Map();
+function limiteEstourado(req){
+  const hoje=new Date().toISOString().slice(0,10);
+  for(const k of [..._HITS.keys()]) if(!k.startsWith(hoje)) _HITS.delete(k);
+  const ip=String(req.headers['x-forwarded-for']||'').split(',')[0].trim()||'anon';
+  const k=hoje+':'+ip;
+  const n=_HITS.get(k)||0;
+  if(n>=LIMITE_DIA) return true;
+  _HITS.set(k,n+1);
+  return false;
+}
 export default async function handler(req, res) {
   // CORS aberto: permite o site no GitHub Pages usar este backend como fallback
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -67,6 +80,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Max-Age', '86400');
   res.setHeader('X-LF-Proxy', 'v3-timeouts'); // marcador de versão p/ validar deploy
+  if (req.method === 'POST' && limiteEstourado(req)) return res.status(429).json({ error: 'Você bateu o limite diário de IA (60 perguntas/dia por pessoa) — volta amanhã! 💙' });
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST.' });
 
