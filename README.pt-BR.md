@@ -1,0 +1,66 @@
+[🇺🇸 English](README.md)
+
+# LearnFlow 🎓
+
+[![ci](https://github.com/lucasgabrieldevgg/learnflow/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasgabrieldevgg/learnflow/actions/workflows/ci.yml)
+
+**Uma tutora de IA que ensina de verdade — muda a representação quando você não entende, em vez de repetir a mesma explicação.**
+
+> 🔗 **Use agora:** [learnflow-ia.vercel.app](https://learnflow-ia.vercel.app)
+
+## 💡 O método
+
+A maioria das IAs educacionais otimiza para *"o usuário quer a resposta → dê a resposta"*. O LearnFlow otimiza para *"o usuário quer aprender → faça ele chegar à resposta"*.
+
+**Princípio central:** se o aluno não entendeu, mude a REPRESENTAÇÃO — nunca repita a mesma explicação.
+
+1. **Perfil de interesses** — no onboarding, a tutora aprende com o que VOCÊ gosta de mexer (jogos, tech, séries, esportes, cozinha, arte, animais, montar e consertar, carros...) e usa esses universos em todas as analogias
+2. **Ponte concreta** — o conceito aparece primeiro dentro do seu universo, com um exemplo SIMPLES de algo que você já conhece ou mexe no dia a dia (celular, jogo, bola, lanche, ônibus); o formalismo vem depois
+3. **Escada de pré-requisitos** — se você travar, ela desce etapa por etapa até achar a base que falta, ensina do zero e sobe de volta
+4. **Método socrático** — a resposta nunca vem de primeira; dicas guiadas até você chegar lá
+5. **Papel e caneta** — "pega algo pra escrever": anote, resolva no papel, depois confirme
+6. **Abstração** — só no fim o contexto é removido, para você não depender da analogia
+
+## ✨ Funcionalidades
+
+- 🪜 **4 níveis de ajuda** — 💡 Dica → 🧩 Exemplo → 👁️ Visualizar → 🧑‍🏫 Me ensine (botões no chat)
+- 📝 **Modo Prova** — desliga todas as ajudas: uma questão por vez, correção rigorosa e balanço de erros
+- 🌍 **8 idiomas** — PT-BR, EN, ES, FR, DE, IT, JA, ZH
+- 🌗 **Tema claro/escuro** — sem flash na troca
+- 💾 **Sessão persistente** — feche e volte: a conversa continua de onde parou
+- 🧰 **Ferramentas de estudo** — resumo, quiz, flashcards, analogia, Feynman e exercícios (tudo ciente do seu perfil)
+- 📱 **Responsiva** — funciona no celular e no desktop
+
+## 🛠️ Arquitetura
+
+- **Frontend:** um único `index.html` — zero build, zero dependências, 100% no navegador
+- **IA com fallback automático:**
+  1. [Pollinations AI](https://pollinations.ai) (anônima e gratuita)
+  2. `/api/tutor` — proxy Vercel Serverless com [OpenRouter](https://openrouter.ai) (modelos gratuitos, key só no servidor)
+  3. Proxy remoto — faz o fallback funcionar até no GitHub Pages
+- **Deploy:** Vercel — [learnflow-ia.vercel.app](https://learnflow-ia.vercel.app) (estático + `api/tutor` Serverless)
+
+## 🚀 Rodando localmente
+
+```bash
+python3 -m http.server 8080
+# abra http://localhost:8080
+```
+
+> A IA anônima da Pollinations bloqueia origin `localhost` — localmente use o proxy Vercel (já configurado no fallback automático).
+
+## 🎨 Identidade — caderno didático
+
+Tipografia de livro didático: **Fraunces** (serif) nos títulos herói, **Atkinson Hyperlegible** — fonte desenhada pra *legibilidade de leitura*, o propósito do produto — no corpo. Esmeralda+ciano sólidos (identidade "educação/crescimento" preservada), zero gradiente, zero glow, zero decoração flutuante.
+
+## 🧪 Testes
+
+```
+npm install && npm test
+```
+
+**38 checks** (jsdom, sem rede): i18n interpolado nos 8 idiomas, `formatMarkdown`/`escapeHtml` (HTML cru NUNCA passa), os validadores de saída da IA (erro de cota disfarçado de resposta, vazamento de raciocínio em EN/pt-BR, degeneração repetitiva — todos FLAGRADOS), cascata de endpoints sem key na URL, o backend `api/tutor.js` por leitura (env vars, limite diário, watchdogs de timeout, marcador de versão) e a **guarda anti-vibe**.
+
+## 🔒 Privacidade
+
+Sem login, sem cadastro. Conversas e perfil ficam no `localStorage` do seu dispositivo. A key da OpenRouter vive apenas numa variável de ambiente da Vercel — nunca no front.
