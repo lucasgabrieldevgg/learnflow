@@ -1,0 +1,13 @@
+{
+  "name": "learnflow",
+  "version": "2.4.0",
+  "private": true,
+  "description": "🎓 Tutora de IA que ensina de verdade: muda a representação quando você não entende",
+  "scripts": {
+    "test": "node tests/lf_test.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  },
+  "license": "MIT"
+}

@@ -1,5 +1,7 @@
 # LearnFlow 🎓
 
+[![ci](https://github.com/lucasgabrieldevgg/learnflow/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasgabrieldevgg/learnflow/actions/workflows/ci.yml)
+
 **Uma tutora de IA que ensina de verdade — muda a representação quando você não entende, em vez de repetir a mesma explicação.**
 
 > 🔗 **Use agora:** [learnflow-ia.vercel.app](https://learnflow-ia.vercel.app)
@@ -44,6 +46,18 @@ python3 -m http.server 8080
 ```
 
 > A IA anônima da Pollinations bloqueia origin `localhost` — localmente use o proxy Vercel (já configurado no fallback automático).
+
+## 🎨 Identidade — caderno didático (operação CRA)
+
+Tipografia de livro didático: **Fraunces** (serif) nos títulos herói, **Atkinson Hyperlegible** — fonte desenhada pra *legibilidade de leitura*, o propósito do produto — no corpo. Esmeralda+ciano sólidos (identidade "educação/crescimento" preservada), zero gradiente, zero glow, zero decoração flutuante.
+
+## 🧪 Testes
+
+```
+npm install && npm test
+```
+
+**38 checks** (jsdom, sem rede): i18n interpolado nos 8 idiomas, `formatMarkdown`/`escapeHtml` (HTML cru NUNCA passa), os validadores de saída da IA (erro de cota disfarçado de resposta, vazamento de raciocínio em EN/pt-BR, degeneração repetitiva — todos FLAGRADOS), cascata de endpoints sem key na URL, o backend `api/tutor.js` por leitura (env vars, limite diário, watchdogs de timeout, marcador de versão) e a **guarda anti-vibe**.
 
 ## 🔒 Privacidade
 

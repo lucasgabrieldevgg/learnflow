@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm test
+      - name: higiene CRA
+        run: |
+          grep -q "Atkinson Hyperlegible" index.html
+          grep -q "Fraunces" index.html
+          if grep -Eq "linear-gradient|radial-gradient|font-family: 'Inter'" index.html; then echo "delator visual"; exit 1; fi
+          if grep -rEn "sk-or-v1-|sk-ant-|NVIDIA_API_KEY.*=.*['\"]nvai" index.html api/; then echo "segredo real exposto"; exit 1; fi
+          test -f LICENSE
