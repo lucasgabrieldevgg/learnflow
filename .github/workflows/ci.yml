@@ -16,7 +16,7 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
-      - name: higiene CRA
+      - name: higiene
         run: |
           grep -q "Atkinson Hyperlegible" index.html
           grep -q "Fraunces" index.html

@@ -1,5 +1,5 @@
 // ============================================================
-// 🎓 Suíte CRA — LearnFlow (caderno didático)
+// 🎓 Suíte de consistência — LearnFlow (caderno didático)
 // Testa as funções puras do app (i18n, markdown, validadores de
 // saída da IA), o backend serverless por leitura e BLINDA o anti-vibe.
 // ============================================================
@@ -88,7 +88,7 @@ function carregar() {
     ok(/X-LF-Proxy/.test(api), 'marcador de versão p/ validar deploy');
   }
 
-  console.log('— 🎨 CRA: NADA DE CARA DE IA —');
+  console.log('— 🎨 NADA DE CARA DE IA —');
   {
     ok(/fonts.googleapis.com\/css2\?family=Atkinson\+Hyperlegible/.test(html), 'corpo em Atkinson Hyperlegible (legibilidade/educação)');
     ok(/family=Fraunces/.test(html) && (html.match(/Fraunces/g) || []).length >= 3, 'títulos herói em Fraunces (caderno didático)');

@@ -47,7 +47,7 @@ python3 -m http.server 8080
 
 > A IA anônima da Pollinations bloqueia origin `localhost` — localmente use o proxy Vercel (já configurado no fallback automático).
 
-## 🎨 Identidade — caderno didático (operação CRA)
+## 🎨 Identidade — caderno didático
 
 Tipografia de livro didático: **Fraunces** (serif) nos títulos herói, **Atkinson Hyperlegible** — fonte desenhada pra *legibilidade de leitura*, o propósito do produto — no corpo. Esmeralda+ciano sólidos (identidade "educação/crescimento" preservada), zero gradiente, zero glow, zero decoração flutuante.
 
