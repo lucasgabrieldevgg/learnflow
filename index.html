@@ -35,6 +35,15 @@
     --warning: #fbbf24;
     --error: #f87171;
   }
+  /* ===== piso de acabamento (superfícies do navegador temáticas) ===== */
+  ::selection { background: rgba(52, 211, 153, 0.32); color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  html { scrollbar-color: var(--border) transparent; scrollbar-width: thin; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; border: 2px solid var(--bg-1); }
+  input, textarea { font-variant-numeric: tabular-nums; }
+  input::placeholder, textarea::placeholder { color: var(--text-dim); opacity: 0.75; }
   html { color-scheme: dark; }
   html[data-theme="light"] { color-scheme: light; }
   :root[data-theme="light"] {
@@ -742,14 +751,14 @@
 
   /* ===== Atividades interativas (terminal + notas) ===== */
   .activity-card {
-    border: 1px solid #6366f1;
-    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid var(--accent-2);
+    background: rgba(6, 182, 212, 0.08);
     border-radius: 12px;
     padding: 12px;
     margin: 8px 0;
   }
   .ac-head { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
-  .ac-kind { font-size: 10.5px; font-weight: 700; color: #818cf8; letter-spacing: 0.4px; text-transform: uppercase; }
+  .ac-kind { font-size: 10.5px; font-weight: 700; color: var(--accent-2); letter-spacing: 0.4px; text-transform: uppercase; }
   .ac-title { font-weight: 700; font-size: 14px; }
   .ac-task { font-size: 13px; line-height: 1.55; margin-bottom: 8px; }
   .ac-editor {
@@ -761,7 +770,7 @@
     padding: 10px; resize: vertical; min-height: 96px;
   }
   .ac-editor.ac-notes { font-family: inherit; font-size: 13px; background: var(--bg-2); color: var(--text); }
-  .ac-editor:focus { outline: none; border-color: #818cf8; }
+  .ac-editor:focus { outline: none; border-color: var(--accent-2); }
   .ac-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
   .ac-output {
     margin: 8px 0 0; padding: 10px;

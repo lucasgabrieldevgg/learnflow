@@ -100,6 +100,11 @@ function carregar() {
     ok(/@keyframes typing/.test(html) && /fabPulse/.test(html), 'animações FUNCIONAIS preservadas (digitando…, microfone gravando)');
     ok(/prefers-reduced-motion/.test(html), 'prefers-reduced-motion presente (novo)');
     ok((html.match(/--accent:\s*#34d399|--accent:\s*#0e9f6e/).length || 0) >= 1, 'identidade esmeralda+ciano PRESERVADA (era legítima)');
+    ok(!/6366f1|818cf8|99,\s*102,\s*241/.test(html), 'zero indigo fora da paleta (atividades usam --accent-2 ciano)');
+    ok(/::selection\s*{\s*background:\s*rgba\(52,\s*211,\s*153/.test(html), 'seleção de texto na identidade esmeralda');
+    ok(/:focus-visible\s*{\s*outline:\s*2px\s*solid\s*var\(--accent\)/.test(html), 'foco visível (:focus-visible) pro teclado');
+    ok(/scrollbar-color:\s*var\(--border\)/.test(html) && /::-webkit-scrollbar-thumb/.test(html), 'scrollbar temático (Firefox + WebKit)');
+    ok(/::placeholder\s*{\s*color:\s*var\(--text-dim\)/.test(html), 'placeholders legíveis (text-dim)');
     ok(fs.existsSync(path.join(root, 'LICENSE')), 'LICENSE MIT presente');
     ok(!/sk-or-v1-[A-Za-z0-9]{10,}/.test(html + api), 'zero segredo real em front+api');
   }
